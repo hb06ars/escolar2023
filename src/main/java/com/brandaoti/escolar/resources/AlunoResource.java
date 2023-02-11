@@ -31,13 +31,14 @@ public class AlunoResource {
 	private AlunoService service;
 
 	@GetMapping(value = "/{id}")
+	@PreAuthorize("hasAnyRole('PROFESSOR')")
 	public ResponseEntity<AlunoDTO> findById(@PathVariable Integer id) {
 		Aluno obj = service.findById(id);
 		return ResponseEntity.ok().body(new AlunoDTO(obj));
 	}
 
 	@GetMapping
-	@PreAuthorize("hasAnyRole('ALUNO')")
+	@PreAuthorize("hasAnyRole('PROFESSOR')")
 	public ResponseEntity<List<AlunoDTO>> findAll() {
 		List<Aluno> list = service.findAll();
 		List<AlunoDTO> listDTO = list.stream().map(obj -> new AlunoDTO(obj)).collect(Collectors.toList());

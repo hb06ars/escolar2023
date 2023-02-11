@@ -26,9 +26,14 @@ public class AdministradorService {
 	private PessoaRepository pessoaRepository;
 	@Autowired
 	private BCryptPasswordEncoder encoder;
+	
+	public Administrador findByEmail(String email) throws ObjectNotFoundException {
+		Optional<Administrador> obj = repository.findByEmail(email); 
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado."));
+	}
 
 	public Administrador findById(Integer id) {
-		Optional<Administrador> obj = repository.findById(id);  //Optional, pode ou nao encontrar o obj
+		Optional<Administrador> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! ID: " + id));
 	}
 

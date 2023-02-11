@@ -26,6 +26,11 @@ public class AlunoService {
 	private PessoaRepository pessoaRepository;
 	@Autowired
 	private BCryptPasswordEncoder encoder;
+	
+	public Aluno findByEmail(String email) throws ObjectNotFoundException {
+		Optional<Aluno> obj = repository.findByEmail(email); 
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado."));
+	}
 
 	public Aluno findById(Integer id) {
 		Optional<Aluno> obj = repository.findById(id);  //Optional, pode ou nao encontrar o obj

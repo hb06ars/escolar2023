@@ -35,6 +35,11 @@ public class ProfessorService {
 	public List<Professor> findAll() {
 		return repository.findAll();
 	}
+	
+	public Professor findByEmail(String email) throws ObjectNotFoundException {
+		Optional<Professor> obj = repository.findByEmail(email); 
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado."));
+	}
 
 	public Professor create(ProfessorDTO objDTO) {
 		objDTO.setId(null);

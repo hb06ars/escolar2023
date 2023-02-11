@@ -29,8 +29,9 @@ public class AdministradorResource {
 
 	@Autowired
 	private AdministradorService service;
-
+	
 	@GetMapping(value = "/{id}")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	public ResponseEntity<AdministradorDTO> findById(@PathVariable Integer id) {
 		Administrador obj = service.findById(id);
 		return ResponseEntity.ok().body(new AdministradorDTO(obj));

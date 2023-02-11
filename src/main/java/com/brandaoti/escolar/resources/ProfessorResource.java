@@ -31,13 +31,14 @@ public class ProfessorResource {
 	private ProfessorService service;
 
 	@GetMapping(value = "/{id}")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	public ResponseEntity<ProfessorDTO> findById(@PathVariable Integer id) {
 		Professor obj = service.findById(id);
 		return ResponseEntity.ok().body(new ProfessorDTO(obj));
 	}
 
 	@GetMapping
-	@PreAuthorize("hasAnyRole('PROFESSOR')")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	public ResponseEntity<List<ProfessorDTO>> findAll() {
 		List<Professor> list = service.findAll();
 		List<ProfessorDTO> listDTO = list.stream().map(obj -> new ProfessorDTO(obj)).collect(Collectors.toList());
