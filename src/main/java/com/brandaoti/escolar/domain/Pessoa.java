@@ -14,6 +14,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.br.CPF;
 
 import com.brandaoti.escolar.domain.enums.Perfil;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -25,13 +30,21 @@ public abstract class Pessoa implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Integer id;
+	
+	@NotNull(message = "Digite um nome.")
+	@NotEmpty(message = "Digite um nome.")
 	protected String nome;
 	
+	@CPF(message = "CPF inválido.")
 	@Column(unique = true)
 	protected String cpf;
 	
+	@Email(message = "Digite um email válido.")
 	@Column(unique = true)
 	protected String email;
+	
+	@NotNull(message = "Digite uma senha.")
+	@NotEmpty(message = "Digite uma senha.")
 	protected String senha;
 	
 	@ElementCollection(fetch = FetchType.EAGER)

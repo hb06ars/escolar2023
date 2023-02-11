@@ -1,6 +1,10 @@
 package com.brandaoti.escolar.exceptions;
 
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +19,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
+	
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<StandardError> objectnotFoundException(ConstraintViolationException ex,
+			HttpServletRequest request) {
+		
+		String mensagem = "";
+		Set<ConstraintViolation<?>> msgs = ex.getConstraintViolations();
+		for(ConstraintViolation<?> erro : msgs) {
+			mensagem = mensagem + erro.getMessage();
+		}
+		StandardError error = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
+				"Violação de dados.", mensagem, request.getRequestURI());
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+	}
 	
 	@ExceptionHandler(AccessDeniedException.class)
 	public ResponseEntity<StandardError> objectnotFoundException(AccessDeniedException ex,
