@@ -7,7 +7,12 @@ import javax.persistence.Entity;
 import com.brandaoti.escolar.domain.enums.Perfil;
 import com.brandaoti.escolar.dtos.ProfessorDTO;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 public class Professor extends Pessoa {
 	private static final long serialVersionUID = 1L;
 

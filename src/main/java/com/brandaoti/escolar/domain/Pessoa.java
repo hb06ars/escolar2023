@@ -17,13 +17,19 @@ import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.br.CPF;
 
 import com.brandaoti.escolar.domain.enums.Perfil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 public abstract class Pessoa implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -53,6 +59,10 @@ public abstract class Pessoa implements Serializable {
 	
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	protected LocalDate dataCriacao = LocalDate.now();
+	
+	@Pattern(regexp = "(d{2})\\d{5}-\\d{3}")
+    protected String telefone;
+	
 
 	//Construtor da classe sem parâmetros
 	public Pessoa() {
@@ -71,62 +81,14 @@ public abstract class Pessoa implements Serializable {
 		addPerfil(Perfil.VISITANTE); // Aqui todo usuario criado vai ter o Perfil de VISITANTE pelo menos.
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getCpf() {
-		return cpf;
-	}
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
+	public void addPerfil(Perfil perfil) {
+		this.perfis.add(perfil.getCodigo());
 	}
 
 	public Set<Perfil> getPerfis() {
 		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
 	}
 
-	public void addPerfil(Perfil perfil) {
-		this.perfis.add(perfil.getCodigo());
-	}
-
-	public LocalDate getDataCriacao() {
-		return dataCriacao;
-	}
-
-	public void setDataCriacao(LocalDate dataCriacao) {
-		this.dataCriacao = dataCriacao;
-	}
-	
 	//Generate Hashcode e equals Serve para fazer comparação de objeto por valor dele, exemplo CPF ou ID.
 	@Override
 	public int hashCode() {
