@@ -17,7 +17,6 @@ import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -60,8 +59,7 @@ public abstract class Pessoa implements Serializable {
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	protected LocalDate dataCriacao = LocalDate.now();
 	
-	@Pattern(regexp = "(d{2})\\d{5}-\\d{3}")
-    protected String telefone;
+	protected String telefone;
 	
 
 	//Construtor da classe sem parâmetros
@@ -71,13 +69,14 @@ public abstract class Pessoa implements Serializable {
 	}
 	
 	//Construtor da classe com parâmetros
-	public Pessoa(Integer id, String nome, String cpf, String email, String senha) {
+	public Pessoa(Integer id, String nome, String cpf, String email, String senha, String telefone) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.cpf = cpf;
 		this.email = email;
 		this.senha = senha;
+		this.telefone = telefone;
 		addPerfil(Perfil.VISITANTE); // Aqui todo usuario criado vai ter o Perfil de VISITANTE pelo menos.
 	}
 

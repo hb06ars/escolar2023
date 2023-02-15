@@ -21,8 +21,8 @@ public class Aluno extends Pessoa {
 		addPerfil(Perfil.ALUNO);
 	}
 
-	public Aluno(Integer id, String nome, String cpf, String email, String senha) {
-		super(id, nome, cpf, email, senha);
+	public Aluno(Integer id, String nome, String cpf, String email, String senha, String telefone) {
+		super(id, nome, cpf, email, senha, telefone);
 		addPerfil(Perfil.ALUNO);
 	}
 	
@@ -30,6 +30,7 @@ public class Aluno extends Pessoa {
 		super();
 		this.id = obj.getId();
 		this.nome = obj.getNome();
+		this.telefone = obj.getTelefone();
 		this.cpf = obj.getCpf();
 		this.email = obj.getEmail();
 		this.senha = obj.getSenha();

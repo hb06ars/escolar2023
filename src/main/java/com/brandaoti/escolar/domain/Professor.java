@@ -21,8 +21,8 @@ public class Professor extends Pessoa {
 		addPerfil(Perfil.PROFESSOR);
 	}
 
-	public Professor(Integer id, String nome, String cpf, String email, String senha) {
-		super(id, nome, cpf, email, senha);
+	public Professor(Integer id, String nome, String cpf, String email, String senha, String telefone) {
+		super(id, nome, cpf, email, senha, telefone);
 		addPerfil(Perfil.PROFESSOR);
 	}
 	
@@ -35,6 +35,7 @@ public class Professor extends Pessoa {
 		this.senha = obj.getSenha();
 		this.perfis = obj.getPerfis().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
 		this.dataCriacao = obj.getDataCriacao();
+		this.telefone = obj.getTelefone();
 	}
 
 	
