@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 
-import com.brandaoti.escolar.domain.Aluno;
+import com.brandaoti.escolar.domain.Pessoa;
 import com.brandaoti.escolar.domain.enums.Perfil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -41,10 +41,10 @@ public class PessoaDTO implements Serializable{
 
 	public PessoaDTO() {
 		super();
-		addPerfil(Perfil.ALUNO);
+		addPerfil(Perfil.VISITANTE);
 	}
 
-	public PessoaDTO(Aluno obj) {
+	public PessoaDTO(Pessoa obj) {
 		super();
 		this.id = obj.getId();
 		this.nome = obj.getNome();
@@ -54,7 +54,7 @@ public class PessoaDTO implements Serializable{
 		this.perfis = obj.getPerfis().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
 		this.dataCriacao = obj.getDataCriacao();
 		this.telefone = obj.getTelefone();
-		addPerfil(Perfil.ALUNO);
+		addPerfil(Perfil.VISITANTE);
 	}
 
 	public Set<Perfil> getPerfis() {
