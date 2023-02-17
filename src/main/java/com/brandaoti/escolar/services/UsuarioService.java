@@ -9,55 +9,51 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.brandaoti.escolar.domain.Aluno;
-import com.brandaoti.escolar.domain.Pessoa;
-import com.brandaoti.escolar.dtos.AlunoDTO;
+import com.brandaoti.escolar.domain.Usuario;
+import com.brandaoti.escolar.dtos.UsuarioDTO;
 import com.brandaoti.escolar.exceptions.DataIntegrityViolationException;
 import com.brandaoti.escolar.exceptions.ObjectNotFoundException;
-import com.brandaoti.escolar.repositories.AlunoRepository;
-import com.brandaoti.escolar.repositories.PessoaRepository;
+import com.brandaoti.escolar.repositories.UsuarioRepository;
 
 @Service
-public class AlunoService {
+public class UsuarioService {
 
 	@Autowired
-	private AlunoRepository repository;
-	@Autowired
-	private PessoaRepository pessoaRepository;
+	private UsuarioRepository repository;
 	@Autowired
 	private BCryptPasswordEncoder encoder;
 	
-	public Aluno findByEmail(String email) throws ObjectNotFoundException {
-		Optional<Aluno> obj = repository.findByEmail(email); 
+	public Usuario findByEmail(String email) throws ObjectNotFoundException {
+		Optional<Usuario> obj = repository.findByEmail(email); 
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado."));
 	}
 
-	public Aluno findById(Integer id) {
-		Optional<Aluno> obj = repository.findById(id);  //Optional, pode ou nao encontrar o obj
+	public Usuario findById(Integer id) {
+		Optional<Usuario> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! ID: " + id));
 	}
 
-	public List<Aluno> findAll() {
+	public List<Usuario> findAll() {
 		return repository.findAll();
 	}
 
-	public Aluno create(AlunoDTO objDTO) {
+	public Usuario create(UsuarioDTO objDTO) {
 		objDTO.setId(null);
 		objDTO.setSenha(encoder.encode(objDTO.getSenha()));
 		validaPorCpfEEmail(objDTO);
-		Aluno newObj = new Aluno(objDTO);
+		Usuario newObj = new Usuario(objDTO);
 		return repository.save(newObj);
 	}
  
-	public Aluno update(Integer id, @Valid AlunoDTO objDTO) {
+	public Usuario update(Integer id, @Valid UsuarioDTO objDTO) {
 		objDTO.setId(id);
-		Aluno oldObj = findById(id);
+		Usuario oldObj = findById(id);
 		
 		if(!objDTO.getSenha().equals(oldObj.getSenha())) 
 			objDTO.setSenha(encoder.encode(objDTO.getSenha()));
 		
 		validaPorCpfEEmail(objDTO);
-		oldObj = new Aluno(objDTO);
+		oldObj = new Usuario(objDTO);
 		return repository.save(oldObj);
 	}
 
@@ -65,13 +61,13 @@ public class AlunoService {
 		repository.deleteById(id);
 	}
 
-	private void validaPorCpfEEmail(AlunoDTO objDTO) {
-		Optional<Pessoa> obj = pessoaRepository.findByCpf(objDTO.getCpf());
+	private void validaPorCpfEEmail(UsuarioDTO objDTO) {
+		Optional<Usuario> obj = repository.findByCpf(objDTO.getCpf());
 		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
 			throw new DataIntegrityViolationException("CPF já cadastrado no sistema!");
 		}
 
-		obj = pessoaRepository.findByEmail(objDTO.getEmail());
+		obj = repository.findByEmail(objDTO.getEmail());
 		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
 			throw new DataIntegrityViolationException("E-mail já cadastrado no sistema!");
 		}

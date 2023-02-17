@@ -2,25 +2,22 @@ package com.brandaoti.escolar.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.br.CPF;
 
-import com.brandaoti.escolar.domain.enums.Perfil;
+import com.brandaoti.escolar.domain.enums.EnumPerfil;
+import com.brandaoti.escolar.dtos.UsuarioDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
@@ -29,7 +26,8 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public abstract class Pessoa implements Serializable {
+@Table(name = "usuario")
+public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -38,6 +36,7 @@ public abstract class Pessoa implements Serializable {
 	
 	@NotNull(message = "Digite um nome.")
 	@NotEmpty(message = "Digite um nome.")
+	@Column
 	protected String nome;
 	
 	@CPF(message = "CPF inválido.")
@@ -50,26 +49,31 @@ public abstract class Pessoa implements Serializable {
 	
 	@NotNull(message = "Digite uma senha.")
 	@NotEmpty(message = "Digite uma senha.")
+	@Column
 	protected String senha;
 	
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "PERFIS")
-	protected Set<Integer> perfis = new HashSet<>(); //Não permite 2 valores iguais na lista.
+	@ManyToOne
+	protected Perfil perfil = new Perfil(null, EnumPerfil.VISITANTE.getCodigo(), EnumPerfil.VISITANTE.getRole(), EnumPerfil.VISITANTE.getDescricao()); //Não permite 2 valores iguais na lista.
 	
 	@JsonFormat(pattern = "dd/MM/yyyy")
+	@Column
 	protected LocalDate dataCriacao = LocalDate.now();
 	
+	@Column
 	protected String telefone;
 	
 
 	//Construtor da classe sem parâmetros
-	public Pessoa() {
+	public Usuario() {
 		super();
-		addPerfil(Perfil.VISITANTE); // Aqui todo usuario criado vai ter o Perfil de VISITANTE pelo menos.
+		//addPerfil(EnumPerfil.VISITANTE); // Aqui todo usuario criado vai ter o Perfil de VISITANTE pelo menos.
 	}
 	
+	
+	
+	
 	//Construtor da classe com parâmetros
-	public Pessoa(Integer id, String nome, String cpf, String email, String senha, String telefone) {
+	public Usuario(Integer id, String nome, String cpf, String email, String senha, String telefone, Perfil perfis) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -77,15 +81,8 @@ public abstract class Pessoa implements Serializable {
 		this.email = email;
 		this.senha = senha;
 		this.telefone = telefone;
-		addPerfil(Perfil.VISITANTE); // Aqui todo usuario criado vai ter o Perfil de VISITANTE pelo menos.
-	}
-
-	public void addPerfil(Perfil perfil) {
-		this.perfis.add(perfil.getCodigo());
-	}
-
-	public Set<Perfil> getPerfis() {
-		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+		this.perfil = perfis;
+		//this.setPerfis(EnumPerfil.VISITANTE.getDescricao()); // Aqui todo usuario criado vai ter o Perfil de VISITANTE pelo menos.
 	}
 
 	//Generate Hashcode e equals Serve para fazer comparação de objeto por valor dele, exemplo CPF ou ID.
@@ -107,7 +104,7 @@ public abstract class Pessoa implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Pessoa other = (Pessoa) obj;
+		Usuario other = (Usuario) obj;
 		if (cpf == null) {
 			if (other.cpf != null)
 				return false;
@@ -121,4 +118,18 @@ public abstract class Pessoa implements Serializable {
 		return true;
 	}
 
+
+
+
+	public Usuario(UsuarioDTO obj) {
+		super();
+		this.id = obj.getId();
+		this.nome = obj.getNome();
+		this.cpf = obj.getCpf();
+		this.email = obj.getEmail();
+		this.senha = obj.getSenha();
+		this.perfil = obj.getPerfil();
+		this.dataCriacao = obj.getDataCriacao();
+		this.telefone = obj.getTelefone();
+	}
 }

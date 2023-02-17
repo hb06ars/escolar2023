@@ -6,29 +6,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.brandaoti.escolar.domain.Administrador;
-import com.brandaoti.escolar.domain.Aluno;
-import com.brandaoti.escolar.domain.Professor;
-import com.brandaoti.escolar.repositories.PessoaRepository;
+import com.brandaoti.escolar.domain.Perfil;
+import com.brandaoti.escolar.domain.Usuario;
+import com.brandaoti.escolar.domain.enums.EnumPerfil;
+import com.brandaoti.escolar.repositories.PerfilRepository;
+import com.brandaoti.escolar.repositories.UsuarioRepository;
 
 @Service //Essa classe serve para injeção de dependencias, o spring cria, destroi, etc
 public class DBService {
 
 	@Autowired
-	private PessoaRepository pessoaRepository;
+	private PerfilRepository perfilRepository;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+	
 	@Autowired
 	private BCryptPasswordEncoder encoder;
 
 	public void instanciaDB() {
-
-		Administrador adm = new Administrador(null, "Henrique Brandão", "550.482.150-95", "brandaoti@mail.com", encoder.encode("123"), "(11)98888-8888");
 		
-		Professor prof = new Professor(null, "Albert Eintein", "903.347.070-56", "albertEinstein@mail.com", encoder.encode("123"), "(11)98888-8887");
+		Perfil perfil_adm = new Perfil(null, EnumPerfil.ADMINISTRADOR.getCodigo(), EnumPerfil.ADMINISTRADOR.getRole() , EnumPerfil.ADMINISTRADOR.getDescricao());
+		Perfil perfil_prof = new Perfil(null, EnumPerfil.PROFESSOR.getCodigo(), EnumPerfil.PROFESSOR.getRole(), EnumPerfil.PROFESSOR.getDescricao());
+		Perfil perfil_aluno = new Perfil(null, EnumPerfil.ALUNO.getCodigo(), EnumPerfil.ALUNO.getRole(), EnumPerfil.ALUNO.getDescricao());
+		Perfil perfil_visitante = new Perfil(null, EnumPerfil.VISITANTE.getCodigo(), EnumPerfil.VISITANTE.getRole(), EnumPerfil.VISITANTE.getDescricao());
+		perfilRepository.saveAll(Arrays.asList(perfil_adm, perfil_prof, perfil_aluno, perfil_visitante));
 		
-		Aluno aluno1 = new Aluno(null, "Maria Mercedes", "271.068.470-54", "maria@mail.com", encoder.encode("123"), "(11)98888-8886");
+		Usuario adm = new Usuario(null, "Henrique Brandão", "550.482.150-95", "brandaoti@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm);
 		
-		Aluno aluno2 = new Aluno(null, "Juca de Sousa", "626.388.560-29", "juca@mail.com", encoder.encode("123"), "(11)98888-8885");
+		Usuario prof = new Usuario(null, "Albert Eintein", "903.347.070-56", "albertEinstein@mail.com", encoder.encode("123"), "(11)98888-8887", perfil_prof);
 		
-		pessoaRepository.saveAll(Arrays.asList(adm, prof, aluno1, aluno2));
+		Usuario aluno1 = new Usuario(null, "Maria Mercedes", "271.068.470-54", "maria@mail.com", encoder.encode("123"), "(11)98888-8886", perfil_aluno);
+		
+		Usuario aluno2 = new Usuario(null, "Juca de Sousa", "626.388.560-29", "juca@mail.com", encoder.encode("123"), "(11)98888-8885", perfil_visitante);
+		
+		usuarioRepository.saveAll(Arrays.asList(adm, prof, aluno1, aluno2));
 	}
 }

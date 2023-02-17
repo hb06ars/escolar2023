@@ -2,14 +2,11 @@ package com.brandaoti.escolar.dtos;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 
-import com.brandaoti.escolar.domain.Administrador;
-import com.brandaoti.escolar.domain.enums.Perfil;
+import com.brandaoti.escolar.domain.Usuario;
+import com.brandaoti.escolar.domain.Perfil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
@@ -18,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 //DTO padrão de Segurança para não retornar um objeto quando chamar a API e sim esse DTO.
-public class AdministradorDTO implements Serializable{
+public class UsuarioDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	protected Integer id;
@@ -33,35 +30,27 @@ public class AdministradorDTO implements Serializable{
 	protected String senha;
 	@NotNull(message = "O campo telefone é requerido")
 	protected String telefone;
-	protected Set<Integer> perfis = new HashSet<>(); // Não permite 2 valores iguais na lista.
+	protected Perfil perfil;
 	
 	@JsonFormat(pattern="dd/MM/yyyy")
 	protected LocalDate dataCriacao = LocalDate.now();
 
-	public AdministradorDTO() {
+	public UsuarioDTO() {
 		super();
-		addPerfil(Perfil.ADMINISTRADOR);
 	}
 
-	public AdministradorDTO(Administrador obj) {
+	public UsuarioDTO(Usuario obj) {
 		super();
 		this.id = obj.getId();
 		this.nome = obj.getNome();
 		this.cpf = obj.getCpf();
 		this.email = obj.getEmail();
 		this.senha = obj.getSenha();
-		this.perfis = obj.getPerfis().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
+		this.perfil = obj.getPerfil();
 		this.telefone = obj.getTelefone();
 		this.dataCriacao = obj.getDataCriacao();
-		addPerfil(Perfil.ADMINISTRADOR);
+		this.perfil = obj.getPerfil();
 	}
 	
-	public Set<Perfil> getPerfis() {
-		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
-	}
-
-	public void addPerfil(Perfil perfil) {
-		this.perfis.add(perfil.getCodigo());
-	}
 
 }

@@ -19,50 +19,50 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.brandaoti.escolar.domain.Professor;
-import com.brandaoti.escolar.dtos.ProfessorDTO;
-import com.brandaoti.escolar.services.ProfessorService;
+import com.brandaoti.escolar.domain.Usuario;
+import com.brandaoti.escolar.dtos.UsuarioDTO;
+import com.brandaoti.escolar.services.UsuarioService;
 
 @RestController
-@RequestMapping(value = "/professores")
-public class ProfessorResource {
+@RequestMapping(value = "/administradores")
+public class UsuarioResource {
 
 	@Autowired
-	private ProfessorService service;
-
+	private UsuarioService service;
+	
 	@GetMapping(value = "/{id}")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
-	public ResponseEntity<ProfessorDTO> findById(@PathVariable Integer id) {
-		Professor obj = service.findById(id);
-		return ResponseEntity.ok().body(new ProfessorDTO(obj));
+	public ResponseEntity<UsuarioDTO> findById(@PathVariable Integer id) {
+		Usuario obj = service.findById(id);
+		return ResponseEntity.ok().body(new UsuarioDTO(obj));
 	}
 
 	@GetMapping
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
-	public ResponseEntity<List<ProfessorDTO>> findAll() {
-		List<Professor> list = service.findAll();
-		List<ProfessorDTO> listDTO = list.stream().map(obj -> new ProfessorDTO(obj)).collect(Collectors.toList());
+	public ResponseEntity<List<UsuarioDTO>> findAll() {
+		List<Usuario> list = service.findAll();
+		List<UsuarioDTO> listDTO = list.stream().map(obj -> new UsuarioDTO(obj)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDTO);
 	}
 
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	@PostMapping
-	public ResponseEntity<ProfessorDTO> create(@Valid @RequestBody ProfessorDTO objDTO) {
-		Professor newObj = service.create(objDTO);
+	public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioDTO objDTO) {
+		Usuario newObj = service.create(objDTO);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<ProfessorDTO> update(@PathVariable Integer id, @Valid @RequestBody ProfessorDTO objDTO) {
-		Professor obj = service.update(id, objDTO);
-		return ResponseEntity.ok().body(new ProfessorDTO(obj));
+	public ResponseEntity<UsuarioDTO> update(@PathVariable Integer id, @Valid @RequestBody UsuarioDTO objDTO) {
+		Usuario obj = service.update(id, objDTO);
+		return ResponseEntity.ok().body(new UsuarioDTO(obj));
 	}
 	
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<ProfessorDTO> delete(@PathVariable Integer id) {
+	public ResponseEntity<UsuarioDTO> delete(@PathVariable Integer id) {
 		service.delete(id); 
 		return ResponseEntity.noContent().build();
 	}

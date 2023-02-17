@@ -1,14 +1,14 @@
 package com.brandaoti.escolar.security;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.brandaoti.escolar.domain.enums.Perfil;
+import com.brandaoti.escolar.domain.Perfil;
 
 public class UserSS implements UserDetails {
 	//Regras de negócios que podemos implementar ao cliente, por exemplo: Conta expirada, Senha expirada, etc...
@@ -19,12 +19,12 @@ public class UserSS implements UserDetails {
 	private String senha;
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserSS(Integer id, String email, String senha, Set<Perfil> perfis) {
+	public UserSS(Integer id, String email, String senha, Perfil perfil) {
 		super();
 		this.id = id;
 		this.email = email;
 		this.senha = senha;
-		this.authorities = perfis.stream().map(x -> new SimpleGrantedAuthority(x.getDescricao())).collect(Collectors.toSet());
+		this.authorities = Arrays.asList(perfil).stream().map(x -> new SimpleGrantedAuthority(x.getRole())).collect(Collectors.toSet());
 	}
 
 	public Integer getId() {
