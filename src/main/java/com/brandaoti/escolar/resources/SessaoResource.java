@@ -2,7 +2,9 @@ package com.brandaoti.escolar.resources;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -29,9 +31,11 @@ import com.brandaoti.escolar.dtos.AdministradorDTO;
 import com.brandaoti.escolar.dtos.AlunoDTO;
 import com.brandaoti.escolar.dtos.PessoaDTO;
 import com.brandaoti.escolar.dtos.ProfessorDTO;
+import com.brandaoti.escolar.dtos.VisitanteDTO;
 import com.brandaoti.escolar.services.AdministradorService;
 import com.brandaoti.escolar.services.AlunoService;
 import com.brandaoti.escolar.services.ProfessorService;
+import com.brandaoti.escolar.services.VisitanteService;
 
 import javassist.tools.rmi.ObjectNotFoundException;
 
@@ -47,6 +51,9 @@ public class SessaoResource {
 
 	@Autowired
 	private AlunoService serviceAluno;
+
+	@Autowired
+	private VisitanteService serviceVisitante;
 
 	@GetMapping
 	@PreAuthorize("hasAnyRole('VISITANTE')")
@@ -88,24 +95,58 @@ public class SessaoResource {
 	
 	private ResponseEntity<?> salvarInformacoes(String email, Collection<? extends GrantedAuthority> perfis, PessoaDTO objAtualizado) {
 		if(perfis.stream().filter(a -> a.getAuthority().equals(Perfil.ADMINISTRADOR.getDescricao())).count() > 0) {
+			//Atualmente ele é um Administrador.
 			AdministradorDTO admnistrador = (AdministradorDTO) administrador(email).getBody();
 			admnistrador.setCpf(objAtualizado.getCpf());
 			admnistrador.setEmail(objAtualizado.getEmail());
 			admnistrador.setNome(objAtualizado.getNome());
 			admnistrador.setTelefone(objAtualizado.getTelefone());
+			
+			admnistrador.setPerfis(null);
+			Set<Integer> listaPerfis = new HashSet<>();
+			objAtualizado.getPerfis().forEach(p -> {
+				listaPerfis.add(p.getCodigo());
+			});
+			
+			admnistrador.setPerfis(listaPerfis);
 			serviceAdm.update(admnistrador.getId(), admnistrador);
 			atualizarSessao(objAtualizado.getEmail(), objAtualizado.getSenha(), objAtualizado.getPerfis());
-			return administrador(email);
+			return ResponseEntity.of(Optional.of(admnistrador));
 		}
 		if(perfis.stream().filter(a -> a.getAuthority().equals(Perfil.PROFESSOR.getDescricao())).count() > 0) {
-			return professor(email);
+			//Atualmente ele é um Administrador.
+			ProfessorDTO professor = (ProfessorDTO) administrador(email).getBody();
+			professor.setCpf(objAtualizado.getCpf());
+			professor.setEmail(objAtualizado.getEmail());
+			professor.setNome(objAtualizado.getNome());
+			professor.setTelefone(objAtualizado.getTelefone());
+			serviceProf.update(professor.getId(), professor);
+			atualizarSessao(objAtualizado.getEmail(), objAtualizado.getSenha(), objAtualizado.getPerfis());
+			return ResponseEntity.of(Optional.of(professor));
 		}
 		if(perfis.stream().filter(a -> a.getAuthority().equals(Perfil.ALUNO.getDescricao())).count() > 0) {
-			return aluno(email);
+			AlunoDTO aluno = (AlunoDTO) administrador(email).getBody();
+			aluno.setCpf(objAtualizado.getCpf());
+			aluno.setEmail(objAtualizado.getEmail());
+			aluno.setNome(objAtualizado.getNome());
+			aluno.setTelefone(objAtualizado.getTelefone());
+			serviceAluno.update(aluno.getId(), aluno);
+			atualizarSessao(objAtualizado.getEmail(), objAtualizado.getSenha(), objAtualizado.getPerfis());
+			return ResponseEntity.of(Optional.of(aluno));
+		}
+		
+		if(perfis.stream().filter(a -> a.getAuthority().equals(Perfil.VISITANTE.getDescricao())).count() > 0) {
+			VisitanteDTO visitante = (VisitanteDTO) administrador(email).getBody();
+			visitante.setCpf(objAtualizado.getCpf());
+			visitante.setEmail(objAtualizado.getEmail());
+			visitante.setNome(objAtualizado.getNome());
+			visitante.setTelefone(objAtualizado.getTelefone());
+			serviceVisitante.update(visitante.getId(), visitante);
+			atualizarSessao(objAtualizado.getEmail(), objAtualizado.getSenha(), objAtualizado.getPerfis());
+			return ResponseEntity.of(Optional.of(visitante));
 		}
 		return null;
 	}
-	
 	
 	
 	private ResponseEntity<?> administrador(String email) {
