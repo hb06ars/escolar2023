@@ -64,11 +64,8 @@ public class SessaoResource {
 		return ResponseEntity.ok().body(sessao);
 	}
 	
-	
-	
 	public ResponseEntity<?> buscarUsuarioSessao() throws ObjectNotFoundException {
 		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-		//Collection<? extends GrantedAuthority> perfis = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 		Usuario obj = serviceUser.findByEmail(email);
 		return ResponseEntity.ok().body(new UsuarioDTO(obj));
 	}
@@ -77,9 +74,7 @@ public class SessaoResource {
 		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		Collection<? extends GrantedAuthority> perfis = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 		return salvarInformacoes(email, perfis, objDTO);
-	}
-
-	
+	}	
 	
 	private ResponseEntity<?> salvarInformacoes(String email, Collection<? extends GrantedAuthority> perfis, UsuarioDTO objAtualizado) {
 		Usuario usuario = serviceUser.findByEmail(email);
@@ -95,8 +90,6 @@ public class SessaoResource {
 		atualizarSessao(objAtualizado.getEmail(), objAtualizado.getSenha(), usuarioAtualizado.getPerfil());
 		return ResponseEntity.of(Optional.of(usuarioAtualizado));
 	}
-	
-	
 	
 	private void atualizarSessao(String email, String senha, Perfil perfil){
 		List<GrantedAuthority> listaDePermissoes = new ArrayList<>();
