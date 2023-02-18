@@ -3,6 +3,7 @@ package com.brandaoti.escolar.resources;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +53,18 @@ public class SessaoResource {
 	public ResponseEntity<?> update(@Valid @RequestBody UsuarioDTO objDTO) throws ObjectNotFoundException {
 		return salvarUsuarioSessao(objDTO);
 	}
+	
+	@GetMapping("/sessao")
+	@PreAuthorize("hasAnyRole({'ROLE_ADMINISTRADOR', 'ROLE_PROFESSOR', 'ROLE_ALUNO', 'ROLE_VISITANTE'})")
+	public ResponseEntity<?> getUsuarioSessao() throws ObjectNotFoundException {
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+		LinkedHashMap<String, String> sessao = new LinkedHashMap<String, String>();
+		sessao.put("email", email);
+		sessao.put("perfil", SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().replace("[ROLE_", "").replace("]", ""));		
+		return ResponseEntity.ok().body(sessao);
+	}
+	
+	
 	
 	public ResponseEntity<?> buscarUsuarioSessao() throws ObjectNotFoundException {
 		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
