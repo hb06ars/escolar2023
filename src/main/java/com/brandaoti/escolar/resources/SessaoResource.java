@@ -77,7 +77,7 @@ public class SessaoResource {
 			admnistrador.setEmail(objAtualizado.getEmail());
 			admnistrador.setNome(objAtualizado.getNome());
 			admnistrador.setTelefone(objAtualizado.getTelefone());
-			admnistrador.setPerfil(servicePerfil.findByCodigo(objAtualizado.getPerfil().getId()));
+			admnistrador.setPerfil(servicePerfil.findByCodigo(objAtualizado.getPerfil().getCodigo()));
 			serviceUser.update(admnistrador.getId(), admnistrador);
 			atualizarSessao(objAtualizado.getEmail(), objAtualizado.getSenha(), admnistrador.getPerfil());
 			return ResponseEntity.of(Optional.of(admnistrador));
@@ -88,7 +88,6 @@ public class SessaoResource {
 			NaoEAdministrador.setEmail(objAtualizado.getEmail());
 			NaoEAdministrador.setNome(objAtualizado.getNome());
 			NaoEAdministrador.setTelefone(objAtualizado.getTelefone());
-			NaoEAdministrador.setPerfil(servicePerfil.findByCodigo(objAtualizado.getPerfil().getId()));
 			serviceUser.update(NaoEAdministrador.getId(), NaoEAdministrador);
 			atualizarSessao(objAtualizado.getEmail(), objAtualizado.getSenha(), NaoEAdministrador.getPerfil());
 			return ResponseEntity.of(Optional.of(NaoEAdministrador));
