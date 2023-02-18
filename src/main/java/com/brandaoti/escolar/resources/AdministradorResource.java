@@ -25,7 +25,7 @@ import com.brandaoti.escolar.services.UsuarioService;
 
 @RestController
 @RequestMapping(value = "/administradores")
-public class UsuarioResource {
+public class AdministradorResource {
 
 	@Autowired
 	private UsuarioService service;
@@ -42,6 +42,7 @@ public class UsuarioResource {
 	public ResponseEntity<List<UsuarioDTO>> findAll() {
 		List<Usuario> list = service.findAll();
 		List<UsuarioDTO> listDTO = list.stream().map(obj -> new UsuarioDTO(obj)).collect(Collectors.toList());
+		listDTO.forEach(l -> l.setSenha(null));
 		return ResponseEntity.ok().body(listDTO);
 	}
 
