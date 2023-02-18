@@ -9,6 +9,7 @@ import javax.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,6 +20,26 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
+	
+	@ExceptionHandler(TransactionSystemException.class)
+	public ResponseEntity<StandardError> objectnotFoundException(TransactionSystemException ex,
+			HttpServletRequest request) {
+		
+		String mensagem = "";
+		if (ex.getRootCause() instanceof ConstraintViolationException) {
+	        ConstraintViolationException exceptions = (ConstraintViolationException) ex.getRootCause();
+	        Set<ConstraintViolation<?>> violacoes = exceptions.getConstraintViolations();
+	        for(ConstraintViolation<?> erro : violacoes) {
+				mensagem = mensagem + erro.getMessage();
+			}
+		}
+		
+		StandardError error = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
+				"Violação de dados.", mensagem, request.getRequestURI());
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+	}
+
 	
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<StandardError> objectnotFoundException(ConstraintViolationException ex,
