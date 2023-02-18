@@ -69,30 +69,18 @@ public class SessaoResource {
 	
 	
 	private ResponseEntity<?> salvarInformacoes(String email, Collection<? extends GrantedAuthority> perfis, UsuarioDTO objAtualizado) {
+		Usuario usuario = serviceUser.findByEmail(email);
+		UsuarioDTO usuarioAtualizado = new UsuarioDTO(usuario); 
+		usuarioAtualizado.setCpf(objAtualizado.getCpf());
+		usuarioAtualizado.setEmail(objAtualizado.getEmail());
+		usuarioAtualizado.setNome(objAtualizado.getNome());
+		usuarioAtualizado.setTelefone(objAtualizado.getTelefone());
 		if(perfis.stream().filter(a -> a.getAuthority().equals(EnumPerfil.ADMINISTRADOR.getRole())).count() > 0) {
-			//Atualmente ele é um Administrador.
-			Usuario usuario = serviceUser.findByEmail(email);
-			UsuarioDTO admnistrador = new UsuarioDTO(usuario); 
-			admnistrador.setCpf(objAtualizado.getCpf());
-			admnistrador.setEmail(objAtualizado.getEmail());
-			admnistrador.setNome(objAtualizado.getNome());
-			admnistrador.setTelefone(objAtualizado.getTelefone());
-			admnistrador.setPerfil(servicePerfil.findByCodigo(objAtualizado.getPerfil().getCodigo()));
-			serviceUser.update(admnistrador.getId(), admnistrador);
-			atualizarSessao(objAtualizado.getEmail(), objAtualizado.getSenha(), admnistrador.getPerfil());
-			return ResponseEntity.of(Optional.of(admnistrador));
-		} else {
-			Usuario usuario = serviceUser.findByEmail(email);
-			UsuarioDTO NaoEAdministrador = new UsuarioDTO(usuario); 
-			NaoEAdministrador.setCpf(objAtualizado.getCpf());
-			NaoEAdministrador.setEmail(objAtualizado.getEmail());
-			NaoEAdministrador.setNome(objAtualizado.getNome());
-			NaoEAdministrador.setTelefone(objAtualizado.getTelefone());
-			serviceUser.update(NaoEAdministrador.getId(), NaoEAdministrador);
-			atualizarSessao(objAtualizado.getEmail(), objAtualizado.getSenha(), NaoEAdministrador.getPerfil());
-			return ResponseEntity.of(Optional.of(NaoEAdministrador));
+			usuarioAtualizado.setPerfil(servicePerfil.findByCodigo(objAtualizado.getPerfil().getCodigo()));
 		}
-		
+		serviceUser.update(usuarioAtualizado.getId(), usuarioAtualizado);
+		atualizarSessao(objAtualizado.getEmail(), objAtualizado.getSenha(), usuarioAtualizado.getPerfil());
+		return ResponseEntity.of(Optional.of(usuarioAtualizado));
 	}
 	
 	
