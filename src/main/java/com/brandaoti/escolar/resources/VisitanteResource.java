@@ -22,15 +22,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.brandaoti.escolar.domain.Usuario;
 import com.brandaoti.escolar.dtos.UsuarioDTO;
-import com.brandaoti.escolar.services.AdministradorService;
+import com.brandaoti.escolar.services.VisitanteService;
 import com.brandaoti.escolar.services.PerfilService;
 
 @RestController
-@RequestMapping(value = "/administradores")
-public class AdministradorResource {
+@RequestMapping(value = "/visitantes")
+public class VisitanteResource {
 
 	@Autowired
-	private AdministradorService administradorService;
+	private VisitanteService alunoService;
 	
 	@Autowired
 	private PerfilService perfilService;
@@ -38,25 +38,24 @@ public class AdministradorResource {
 	@GetMapping(value = "/{id}")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	public ResponseEntity<UsuarioDTO> findById(@PathVariable Integer id) {
-		Usuario obj = administradorService.buscarIdAdministrador(id);
+		Usuario obj = alunoService.buscarIdVisitante(id);
 		return ResponseEntity.ok().body(new UsuarioDTO(obj));
 	}
 
-	@GetMapping(value = "/listaradministradores")
+	@GetMapping(value = "/listarvisitantes")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
-	public ResponseEntity<List<UsuarioDTO>> findAllAdministradores() {
-		Optional<List<Usuario>> list = administradorService.buscarTodosAdministradores();
+	public ResponseEntity<List<UsuarioDTO>> findAllVisitantees() {
+		Optional<List<Usuario>> list = alunoService.buscarTodosVisitantees();
 		List<UsuarioDTO> listDTO = list.get().stream().map(obj -> new UsuarioDTO(obj)).collect(Collectors.toList());
 		listDTO.forEach(l -> l.setSenha(null));
 		return ResponseEntity.ok().body(listDTO);
 	}
 	
-
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	@PostMapping
 	public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioDTO objDTO) {
-		objDTO.setPerfil(perfilService.findPerfilAdministrador());
-		Usuario newObj = administradorService.create(objDTO);
+		objDTO.setPerfil(perfilService.findPerfilVisitante());
+		Usuario newObj = alunoService.create(objDTO);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
@@ -64,15 +63,15 @@ public class AdministradorResource {
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<UsuarioDTO> update(@PathVariable Integer id, @Valid @RequestBody UsuarioDTO objDTO) {
-		objDTO.setPerfil(perfilService.findByCodigo(objDTO.getPerfil().getCodigo()));
-		Usuario obj = administradorService.update(id, objDTO);
+		objDTO.setPerfil(perfilService.findPerfilVisitante());
+		Usuario obj = alunoService.update(id, objDTO);
 		return ResponseEntity.ok().body(new UsuarioDTO(obj));
 	}
 	
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<UsuarioDTO> delete(@PathVariable Integer id) {
-		administradorService.delete(id); 
+		alunoService.delete(id); 
 		return ResponseEntity.noContent().build();
 	}
 

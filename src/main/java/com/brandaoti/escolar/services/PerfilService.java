@@ -30,8 +30,23 @@ public class PerfilService {
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Código: " + codigo));
 	}
 	
-	public Perfil finPerfildAdministrador() {
-		Optional<Perfil> obj = repository.finPerfildAdministrador();  //Optional, pode ou nao encontrar o obj
+	public Perfil findPerfilAdministrador() {
+		Optional<Perfil> obj = repository.findPerfilAdministrador();  //Optional, pode ou nao encontrar o obj
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
+	}
+	
+	public Perfil findPerfilAluno() {
+		Optional<Perfil> obj = repository.findPerfilAluno();  //Optional, pode ou nao encontrar o obj
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
+	}
+	
+	public Perfil findPerfilVisitante() {
+		Optional<Perfil> obj = repository.findPerfilVisitante();  //Optional, pode ou nao encontrar o obj
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
+	}
+	
+	public Perfil findPerfilProfessor() {
+		Optional<Perfil> obj = repository.findPerfilProfessor();  //Optional, pode ou nao encontrar o obj
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
 	}
 

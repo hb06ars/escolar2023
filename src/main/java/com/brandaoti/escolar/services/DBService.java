@@ -43,12 +43,12 @@ public class DBService {
 		usuarioRepository.saveAll(Arrays.asList(adm, prof, aluno1, aluno2));
 		
 		
-		usuarioRepository.save(new Usuario(null, "AAA Brandão", "87550937010", "aaa@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
-		usuarioRepository.save(new Usuario(null, "SSS Brandão", "33187639003", "sss@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
-		usuarioRepository.save(new Usuario(null, "SSS Brandão", "21312763035", "ccc@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
-		usuarioRepository.save(new Usuario(null, "SSS Brandão", "94604866066", "cvv@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
-		usuarioRepository.save(new Usuario(null, "SSS Brandão", "63772024076", "ccv@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
-		usuarioRepository.save(new Usuario(null, "SSS Brandão", "62500637069", "ffg@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
+		usuarioRepository.save(new Usuario(null, "João de Souza", "87550937010", "aaa@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
+		usuarioRepository.save(new Usuario(null, "José dos Santos", "33187639003", "sss@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
+		usuarioRepository.save(new Usuario(null, "Paulo da Silva", "21312763035", "ccc@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
+		usuarioRepository.save(new Usuario(null, "Ana Maria de Paula", "94604866066", "cvv@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
+		usuarioRepository.save(new Usuario(null, "Flávia Castro", "63772024076", "ccv@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
+		usuarioRepository.save(new Usuario(null, "Márcia Ferreira", "62500637069", "ffg@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
 		
 		
 		
