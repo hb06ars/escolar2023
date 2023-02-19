@@ -66,14 +66,13 @@ public class Usuario implements Serializable {
 	//Construtor da classe sem parâmetros
 	public Usuario() {
 		super();
-		//addPerfil(EnumPerfil.VISITANTE); // Aqui todo usuario criado vai ter o Perfil de VISITANTE pelo menos.
 	}
 	
 	
 	
 	
 	//Construtor da classe com parâmetros
-	public Usuario(Integer id, String nome, String cpf, String email, String senha, String telefone, Perfil perfis) {
+	public Usuario(Integer id, String nome, String cpf, String email, String senha, String telefone, Perfil perfil) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -81,8 +80,7 @@ public class Usuario implements Serializable {
 		this.email = email;
 		this.senha = senha;
 		this.telefone = telefone;
-		this.perfil = perfis;
-		//this.setPerfis(EnumPerfil.VISITANTE.getDescricao()); // Aqui todo usuario criado vai ter o Perfil de VISITANTE pelo menos.
+		this.perfil = perfil;
 	}
 
 	//Generate Hashcode e equals Serve para fazer comparação de objeto por valor dele, exemplo CPF ou ID.

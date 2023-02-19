@@ -29,6 +29,11 @@ public class PerfilService {
 		Optional<Perfil> obj = repository.findByCodigo(codigo);  //Optional, pode ou nao encontrar o obj
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Código: " + codigo));
 	}
+	
+	public Perfil finPerfildAdministrador() {
+		Optional<Perfil> obj = repository.finPerfildAdministrador();  //Optional, pode ou nao encontrar o obj
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
+	}
 
 	public List<Perfil> findAll() {
 		return repository.findAll();

@@ -30,6 +30,7 @@ public class UsuarioDTO implements Serializable{
 	protected String senha;
 	@NotNull(message = "O campo telefone é requerido")
 	protected String telefone;
+	
 	protected Perfil perfil;
 	
 	@JsonFormat(pattern="dd/MM/yyyy")

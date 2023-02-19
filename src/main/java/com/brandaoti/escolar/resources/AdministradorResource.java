@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.brandaoti.escolar.domain.Usuario;
 import com.brandaoti.escolar.dtos.UsuarioDTO;
 import com.brandaoti.escolar.services.AdministradorService;
+import com.brandaoti.escolar.services.PerfilService;
 
 @RestController
 @RequestMapping(value = "/administradores")
@@ -30,7 +31,10 @@ public class AdministradorResource {
 
 	@Autowired
 	private AdministradorService administradorService;
-
+	
+	@Autowired
+	private PerfilService perfilService;
+	
 	@GetMapping(value = "/{id}")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	public ResponseEntity<UsuarioDTO> findById(@PathVariable Integer id) {
@@ -52,6 +56,7 @@ public class AdministradorResource {
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	@PostMapping
 	public ResponseEntity<UsuarioDTO> create(@Valid @RequestBody UsuarioDTO objDTO) {
+		objDTO.setPerfil(perfilService.finPerfildAdministrador());
 		Usuario newObj = administradorService.create(objDTO);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
@@ -60,6 +65,7 @@ public class AdministradorResource {
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<UsuarioDTO> update(@PathVariable Integer id, @Valid @RequestBody UsuarioDTO objDTO) {
+		objDTO.setPerfil(perfilService.findByCodigo(objDTO.getPerfil().getCodigo()));
 		Usuario obj = administradorService.update(id, objDTO);
 		return ResponseEntity.ok().body(new UsuarioDTO(obj));
 	}
