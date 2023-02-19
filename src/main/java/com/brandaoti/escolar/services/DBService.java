@@ -41,5 +41,16 @@ public class DBService {
 		Usuario aluno2 = new Usuario(null, "Juca de Sousa", "626.388.560-29", "juca@mail.com", encoder.encode("123"), "(11)98888-8885", perfil_visitante);
 		
 		usuarioRepository.saveAll(Arrays.asList(adm, prof, aluno1, aluno2));
+		
+		
+		usuarioRepository.save(new Usuario(null, "AAA Brandão", "87550937010", "aaa@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
+		usuarioRepository.save(new Usuario(null, "SSS Brandão", "33187639003", "sss@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
+		usuarioRepository.save(new Usuario(null, "SSS Brandão", "21312763035", "ccc@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
+		usuarioRepository.save(new Usuario(null, "SSS Brandão", "94604866066", "cvv@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
+		usuarioRepository.save(new Usuario(null, "SSS Brandão", "63772024076", "ccv@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
+		usuarioRepository.save(new Usuario(null, "SSS Brandão", "62500637069", "ffg@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
+		
+		
+		
 	}
 }
