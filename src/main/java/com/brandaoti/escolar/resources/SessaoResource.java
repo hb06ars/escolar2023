@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.brandaoti.escolar.domain.Perfil;
 import com.brandaoti.escolar.domain.Usuario;
 import com.brandaoti.escolar.domain.enums.EnumPerfil;
+import com.brandaoti.escolar.dtos.NovaSenhaDTO;
 import com.brandaoti.escolar.dtos.UsuarioDTO;
 import com.brandaoti.escolar.services.PerfilService;
 import com.brandaoti.escolar.services.UsuarioService;
@@ -41,6 +43,9 @@ public class SessaoResource {
 
 	@Autowired
 	private PerfilService servicePerfil;
+	
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 
 	@GetMapping
 	@PreAuthorize("hasAnyRole({'ROLE_ADMINISTRADOR', 'ROLE_PROFESSOR', 'ROLE_ALUNO', 'ROLE_VISITANTE'})")
@@ -52,6 +57,19 @@ public class SessaoResource {
 	@PreAuthorize("hasAnyRole({'ROLE_ADMINISTRADOR', 'ROLE_PROFESSOR', 'ROLE_ALUNO', 'ROLE_VISITANTE'})")
 	public ResponseEntity<?> update(@Valid @RequestBody UsuarioDTO objDTO) throws ObjectNotFoundException {
 		return salvarUsuarioSessao(objDTO);
+	}
+	
+	@PutMapping("/alterarsenha")
+	@PreAuthorize("hasAnyRole({'ROLE_ADMINISTRADOR', 'ROLE_PROFESSOR', 'ROLE_ALUNO', 'ROLE_VISITANTE'})")
+	public ResponseEntity<?> alterarSenha(@Valid @RequestBody NovaSenhaDTO novaSenha) throws ObjectNotFoundException {
+		UsuarioDTO usuarioSessao = (UsuarioDTO) buscarUsuarioSessao().getBody();
+		if(novaSenha.getNovaSenha().equals(novaSenha.getNovaSenhaConfirmada())) {
+			usuarioSessao.setSenha(novaSenha.getNovaSenha());
+			serviceUser.update(usuarioSessao.getId(), usuarioSessao);
+			atualizarSessao(usuarioSessao.getEmail(), usuarioSessao.getSenha(), usuarioSessao.getPerfil());
+			return salvarUsuarioSessao(usuarioSessao);
+		}	
+		return ResponseEntity.ok().body("Senha alterada com sucesso.");
 	}
 	
 	@GetMapping("/sessao")
