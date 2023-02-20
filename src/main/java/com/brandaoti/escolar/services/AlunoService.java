@@ -43,7 +43,7 @@ public class AlunoService {
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! ID: " + id));
 	}
 
-	public Optional<List<Usuario>> buscarTodosAlunoes() {
+	public Optional<List<Usuario>> buscarTodosAlunos() {
 		return Repository.buscarTodosAlunos();
 	}
 

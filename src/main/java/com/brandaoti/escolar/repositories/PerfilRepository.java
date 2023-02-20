@@ -18,7 +18,7 @@ public interface PerfilRepository extends JpaRepository<Perfil, Integer>{
 	@Query("SELECT p FROM Perfil p WHERE upper(p.descricao) like 'PROFESSOR' ")
 	Optional<Perfil> findPerfilProfessor();
 	
-	@Query("SELECT p FROM Perfil p WHERE upper(p.descricao) like 'PROFESSOR' ")
+	@Query("SELECT p FROM Perfil p WHERE upper(p.descricao) like 'ALUNO' ")
 	Optional<Perfil> findPerfilAluno();
 	
 	@Query("SELECT p FROM Perfil p WHERE upper(p.descricao) like 'VISITANTE' ")
