@@ -1,9 +1,10 @@
 package com.brandaoti.escolar.dtos;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalTime;
 
 import com.brandaoti.escolar.domain.Disciplina;
+import com.brandaoti.escolar.domain.Turma;
 import com.brandaoti.escolar.domain.Usuario;
 import com.brandaoti.escolar.domain.enums.EnumPeriodo;
 import com.brandaoti.escolar.domain.enums.EnumSemana;
@@ -19,7 +20,11 @@ public class AulaDTO {
 	protected EnumSemana diaDaSemana;
 	protected EnumPeriodo periodo;
 	protected Disciplina disciplina;
-	protected List<Usuario> alunos;
+	protected Turma turma;
 	protected LocalDate dataAtualizacao;
+	protected LocalTime inicioAula;
+	protected LocalTime fimAula;
+	protected Usuario professor;
+	protected Usuario professorSubstituto;
 	
 }

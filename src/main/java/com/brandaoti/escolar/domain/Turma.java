@@ -12,8 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import com.brandaoti.escolar.domain.enums.EnumPeriodo;
 import com.brandaoti.escolar.dtos.TurmaDTO;
@@ -33,28 +31,19 @@ public class Turma implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Integer id;
 	
-	@NotNull(message = "Digite a série.")
-	@NotEmpty(message = "Digite a série.")
 	@Column(unique = false)
 	protected Integer serie;
 
-	@NotNull(message = "Digite a turma.")
-	@NotEmpty(message = "Digite a turma.")
 	@Column(unique = false)
 	protected String turma;
 	
-	@NotNull(message = "Digite a sala.")
-	@NotEmpty(message = "Digite a sala.")
 	@Column(unique = false)
 	protected Integer sala;
 	
-	@NotNull(message = "Insira o período.")
-	@NotEmpty(message = "Insira o período.")
 	@Column(unique = false)
 	protected EnumPeriodo periodo;
 
 	@OneToMany
-	@Column(unique = false)
 	protected List<Usuario> alunos;
 	
 	

@@ -9,8 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import com.brandaoti.escolar.dtos.DisciplinaDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -32,8 +30,6 @@ public class Disciplina implements Serializable {
 	@Column(unique = false)
 	protected Integer codigo;
 	
-	@NotNull(message = "Digite a disciplina.")
-	@NotEmpty(message = "Digite a disciplina.")
 	@Column(unique = true)
 	protected String nomeDisciplina;
 	

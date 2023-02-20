@@ -2,17 +2,15 @@ package com.brandaoti.escolar.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import com.brandaoti.escolar.domain.enums.EnumPeriodo;
 import com.brandaoti.escolar.domain.enums.EnumSemana;
@@ -33,24 +31,30 @@ public class Aula implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Integer id;
 	
-	@NotNull(message = "Digite o dia da Semana.")
-	@NotEmpty(message = "Digite o dia da Semana.")
 	@Column(unique = false)
 	protected EnumSemana diaDaSemana;
 
-	@NotNull(message = "Digite o período.")
-	@NotEmpty(message = "Digite o período.")
 	@Column(unique = false)
 	protected EnumPeriodo periodo;
 	
-	@NotNull(message = "Digite a disciplina.")
-	@NotEmpty(message = "Digite a disciplina.")
-	@Column(unique = false)
+	@ManyToOne
 	protected Disciplina disciplina;
-
-	@OneToMany
+	
+	@ManyToOne
+	protected Usuario professor;
+	
+	@ManyToOne
+	protected Usuario professorSubstituto;
+	
 	@Column(unique = false)
-	protected List<Usuario> alunos;
+	protected LocalTime inicioAula = LocalTime.of(00, 00, 00);
+	
+	@Column(unique = false)
+	protected LocalTime fimAula = LocalTime.of(00, 00, 00);
+	
+
+	@ManyToOne
+	protected Turma turma;
 	
 	
 	@JsonFormat(pattern = "dd/MM/yyyy")
@@ -63,14 +67,18 @@ public class Aula implements Serializable {
 	}
 	
 	//Construtor da classe com parâmetros
-	public Aula(Integer id, EnumSemana diaDaSemana, EnumPeriodo periodo, Disciplina disciplina, LocalDate dataAtualizacao, List<Usuario> alunos) {
+	public Aula(Integer id, EnumSemana diaDaSemana, EnumPeriodo periodo, Disciplina disciplina, LocalDate dataAtualizacao, Turma turma, Usuario professor, Usuario professorSubstituto, LocalTime inicioAula, LocalTime fimAula) {
 		super();
 		this.id = id;
 		this.diaDaSemana = diaDaSemana;
 		this.periodo = periodo;
 		this.disciplina = disciplina;
-		this.alunos = alunos;
+		this.turma = turma;
 		this.dataAtualizacao = dataAtualizacao;
+		this.inicioAula = inicioAula;
+		this.fimAula = fimAula;
+		this.professor = professor; 
+		this.professorSubstituto = professorSubstituto;
 	}
 
 	public Aula(AulaDTO obj) {
@@ -79,7 +87,13 @@ public class Aula implements Serializable {
 		this.diaDaSemana = obj.getDiaDaSemana();
 		this.periodo = obj.getPeriodo();
 		this.disciplina = obj.getDisciplina();
-		this.alunos = obj.getAlunos();
+		this.turma = obj.getTurma();
 		this.dataAtualizacao = obj.getDataAtualizacao();
+		this.inicioAula = obj.getInicioAula();
+		this.fimAula = obj.getFimAula();
+		this.professor = obj.getProfessor();
+		this.professorSubstituto = obj.getProfessorSubstituto();
+
+		
 	}
 }
