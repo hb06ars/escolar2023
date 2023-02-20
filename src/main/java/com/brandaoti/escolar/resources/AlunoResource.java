@@ -36,14 +36,14 @@ public class AlunoResource {
 	private PerfilService perfilService;
 	
 	@GetMapping(value = "/{id}")
-	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR')")
 	public ResponseEntity<UsuarioDTO> findById(@PathVariable Integer id) {
 		Usuario obj = alunoService.buscarIdAluno(id);
 		return ResponseEntity.ok().body(new UsuarioDTO(obj));
 	}
 
 	@GetMapping(value = "/listaralunos")
-	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR')")
 	public ResponseEntity<List<UsuarioDTO>> findAllAlunos() {
 		Optional<List<Usuario>> list = alunoService.buscarTodosAlunos();
 		List<UsuarioDTO> listDTO = list.get().stream().map(obj -> new UsuarioDTO(obj)).collect(Collectors.toList());
