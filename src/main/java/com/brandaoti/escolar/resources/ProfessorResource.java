@@ -39,6 +39,7 @@ public class ProfessorResource {
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	public ResponseEntity<UsuarioDTO> findById(@PathVariable Integer id) {
 		Usuario obj = professorService.buscarIdProfessor(id);
+		obj.setSenha(null);
 		return ResponseEntity.ok().body(new UsuarioDTO(obj));
 	}
 
@@ -63,6 +64,8 @@ public class ProfessorResource {
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<UsuarioDTO> update(@PathVariable Integer id, @Valid @RequestBody UsuarioDTO objDTO) {
+		Usuario objAntigo = professorService.buscarIdProfessor(objDTO.getId());
+		objDTO.setSenha(objAntigo.getSenha());
 		objDTO.setPerfil(perfilService.findPerfilProfessor());
 		Usuario obj = professorService.update(id, objDTO);
 		return ResponseEntity.ok().body(new UsuarioDTO(obj));

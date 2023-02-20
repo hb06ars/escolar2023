@@ -14,7 +14,6 @@ public class PerfilDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	protected Integer id;
-	
 	protected Integer codigo;
 	protected String role;
 	protected String descricao;

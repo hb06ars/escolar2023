@@ -85,6 +85,10 @@ public class DBService {
 		usuarioRepository.save(new Usuario(null, "Júlio dos Santos", "69773820076", "sdfsdddsfadaa@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilAluno().get()));
 		usuarioRepository.save(new Usuario(null, "Flávio Oliveira", "92618616014", "ssdfsdfdfsdddsfadaa@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilAluno().get()));
 		
+		// VISITANTES
+		usuarioRepository.save(new Usuario(null, "Jorge visitante", "35914698073", "ardaa@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilVisitante().get()));
+		usuarioRepository.save(new Usuario(null, "Maria visitante", "10911709088", "faddsfaa@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilVisitante().get()));
+				
 		// DISCIPLINA
 		disciplinaRepository.save(new Disciplina(null, 1, "PORTUGUÊS", null));
 		disciplinaRepository.save(new Disciplina(null, 2, "MATEMÁTICA", null));

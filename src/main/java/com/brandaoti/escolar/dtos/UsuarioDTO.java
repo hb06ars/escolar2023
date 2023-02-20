@@ -3,10 +3,8 @@ package com.brandaoti.escolar.dtos;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import javax.validation.constraints.NotNull;
-
-import com.brandaoti.escolar.domain.Usuario;
 import com.brandaoti.escolar.domain.Perfil;
+import com.brandaoti.escolar.domain.Usuario;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
@@ -20,15 +18,10 @@ public class UsuarioDTO implements Serializable{
 	
 	protected Integer id;
 	
-	@NotNull(message = "O campo nome é requerido")
 	protected String nome;
-	@NotNull(message = "O campo CPF é requerido")
 	protected String cpf;
-	@NotNull(message = "O campo email é requerido")
 	protected String email;
-	@NotNull(message = "O campo senha é requerido")
 	protected String senha;
-	@NotNull(message = "O campo telefone é requerido")
 	protected String telefone;
 	
 	protected Perfil perfil;
