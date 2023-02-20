@@ -34,12 +34,35 @@ public class AulaDTO {
 		this.diaDaSemana = obj.getDiaDaSemana();
 		this.periodo = obj.getPeriodo();
 		this.disciplina = obj.getDisciplina();
-		this.turma = obj.getTurma();
+		this.turma = removerDadosTurma(obj.getTurma());
 		this.dataAtualizacao = obj.getDataAtualizacao();
 		this.inicioAula = obj.getInicioAula();
 		this.fimAula = obj.getFimAula();
-		this.professor = obj.getProfessor();
-		this.professorSubstituto = obj.getProfessorSubstituto();
+		this.professor = removerDadosProfessores(obj.getProfessor());
+		this.professorSubstituto = removerDadosProfessores(obj.getProfessorSubstituto());
+	}
+	
+	
+	public Turma removerDadosTurma(Turma obj) {
+		obj.getAlunos().stream().forEach(o -> {
+			o.setCpf(null);
+			o.setEmail(null);
+			o.setSenha(null);
+			o.setPerfil(null);
+			o.setDataCriacao(null);
+			o.setTelefone(null);
+		});
+		return obj;
+	}
+	
+	public Usuario removerDadosProfessores(Usuario obj) {
+		obj.setCpf(null);
+		obj.setEmail(null);
+		obj.setSenha(null);
+		obj.setPerfil(null);
+		obj.setDataCriacao(null);
+		obj.setTelefone(null);
+		return obj;
 	}
 	
 }

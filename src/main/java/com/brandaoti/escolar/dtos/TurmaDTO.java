@@ -30,7 +30,19 @@ public class TurmaDTO {
 		this.sala = obj.getSala();
 		this.periodo = obj.getPeriodo();
 		this.dataAtualizacao = obj.getDataAtualizacao();
-		this.alunos = obj.getAlunos();
+		this.alunos = removerDados(obj.getAlunos());
+	}
+	
+	public List<Usuario> removerDados(List<Usuario> obj) {
+		obj.stream().forEach(o -> {
+			o.setCpf(null);
+			o.setEmail(null);
+			o.setSenha(null);
+			o.setPerfil(null);
+			o.setDataCriacao(null);
+			o.setTelefone(null);
+		});
+		return obj;
 	}
 
 	
