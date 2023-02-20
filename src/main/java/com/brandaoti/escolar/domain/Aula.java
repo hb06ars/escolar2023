@@ -93,7 +93,6 @@ public class Aula implements Serializable {
 		this.fimAula = obj.getFimAula();
 		this.professor = obj.getProfessor();
 		this.professorSubstituto = obj.getProfessorSubstituto();
-
-		
 	}
+	
 }

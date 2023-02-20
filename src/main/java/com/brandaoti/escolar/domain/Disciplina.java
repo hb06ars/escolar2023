@@ -58,4 +58,5 @@ public class Disciplina implements Serializable {
 		this.nomeDisciplina = obj.getNomeDisciplina();
 		this.dataAtualizacao = obj.getDataAtualizacao();
 	}
+	
 }
