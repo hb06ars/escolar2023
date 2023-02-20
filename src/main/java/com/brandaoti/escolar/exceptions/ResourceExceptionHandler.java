@@ -99,6 +99,18 @@ public class ResourceExceptionHandler {
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 	}
+	
+	
+	@ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+	public ResponseEntity<StandardError> dataIntegrityViolationException(org.springframework.dao.DataIntegrityViolationException ex,
+			HttpServletRequest request) {
+
+		StandardError error = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
+				"Violação de dados", "Este registro está associado a outros dados no Sistema, favor removê-los antes.", request.getRequestURI());
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+	}
+	
 }
 
 
