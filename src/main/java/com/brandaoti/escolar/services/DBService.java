@@ -32,25 +32,36 @@ public class DBService {
 		Perfil perfil_visitante = new Perfil(null, EnumPerfil.VISITANTE.getCodigo(), EnumPerfil.VISITANTE.getRole(), EnumPerfil.VISITANTE.getDescricao());
 		perfilRepository.saveAll(Arrays.asList(perfil_adm, perfil_prof, perfil_aluno, perfil_visitante));
 		
-		Usuario adm = new Usuario(null, "Henrique Brandão", "550.482.150-95", "brandaoti@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm);
-		
-		Usuario prof = new Usuario(null, "Albert Eintein", "903.347.070-56", "albertEinstein@mail.com", encoder.encode("123"), "(11)98888-8887", perfil_prof);
-		
-		Usuario aluno1 = new Usuario(null, "Maria Mercedes", "271.068.470-54", "maria@mail.com", encoder.encode("123"), "(11)98888-8886", perfil_aluno);
-		
-		Usuario aluno2 = new Usuario(null, "Juca de Sousa", "626.388.560-29", "juca@mail.com", encoder.encode("123"), "(11)98888-8885", perfil_visitante);
-		
-		usuarioRepository.saveAll(Arrays.asList(adm, prof, aluno1, aluno2));
+		preencherDados();
 		
 		
-		usuarioRepository.save(new Usuario(null, "João de Souza", "87550937010", "aaa@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
-		usuarioRepository.save(new Usuario(null, "José dos Santos", "33187639003", "sss@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
-		usuarioRepository.save(new Usuario(null, "Paulo da Silva", "21312763035", "ccc@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
-		usuarioRepository.save(new Usuario(null, "Ana Maria de Paula", "94604866066", "cvv@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
-		usuarioRepository.save(new Usuario(null, "Flávia Castro", "63772024076", "ccv@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
-		usuarioRepository.save(new Usuario(null, "Márcia Ferreira", "62500637069", "ffg@mail.com", encoder.encode("123"), "(11)98888-8888", perfil_adm));
+	}
+	
+	public void preencherDados() {
+		// ADMINISTRADORES
+		usuarioRepository.save(new Usuario(null, "Henrique Brandão", "06648949090", "brandaoti@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilAdministrador().get()));
+		usuarioRepository.save(new Usuario(null, "José dos Santos", "33187639003", "sdss@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilAdministrador().get()));
+		usuarioRepository.save(new Usuario(null, "Paulo da Silva", "21312763035", "ccc@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilAdministrador().get()));
+		usuarioRepository.save(new Usuario(null, "Ana Maria de Paula", "94604866066", "cvv@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilAdministrador().get()));
+		usuarioRepository.save(new Usuario(null, "Flávia Castro", "63772024076", "ccv@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilAdministrador().get()));
+		usuarioRepository.save(new Usuario(null, "Márcia Ferreira", "62500637069", "ffg@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilAdministrador().get()));
+
+		// PROFESSORES
+		usuarioRepository.save(new Usuario(null, "Albert Eintein", "87550937010", "adaa@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilProfessor().get()));
+		usuarioRepository.save(new Usuario(null, "Isaac Newton", "08977294045", "addsfaa@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilProfessor().get()));
+
+		// ALUNOS
+		usuarioRepository.save(new Usuario(null, "Maria Andrade", "48927543076", "adaadfgd@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilAluno().get()));
+		usuarioRepository.save(new Usuario(null, "Maria Mercedes", "34975653001", "adaffga@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilAluno().get()));
+		usuarioRepository.save(new Usuario(null, "Juca de Sousa", "26411925003", "ddsfadaa@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilAluno().get()));
+		usuarioRepository.save(new Usuario(null, "Júlio dos Santos", "69773820076", "sdfsdddsfadaa@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilAluno().get()));
+		usuarioRepository.save(new Usuario(null, "Flávio Oliveira", "92618616014", "ssdfsdfdfsdddsfadaa@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilAluno().get()));
+		
+		
 		
 		
 		
 	}
+	
+	
 }

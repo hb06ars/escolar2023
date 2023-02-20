@@ -17,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,9 +43,6 @@ public class SessaoResource {
 	@Autowired
 	private PerfilService servicePerfil;
 	
-	@Autowired
-	private BCryptPasswordEncoder encoder;
-
 	@GetMapping
 	@PreAuthorize("hasAnyRole({'ROLE_ADMINISTRADOR', 'ROLE_PROFESSOR', 'ROLE_ALUNO', 'ROLE_VISITANTE'})")
 	public ResponseEntity<?> meuUsuario() throws ObjectNotFoundException {
