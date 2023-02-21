@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import com.brandaoti.escolar.domain.enums.EnumPeriodo;
 import com.brandaoti.escolar.dtos.TurmaDTO;
+import com.brandaoti.escolar.dtos.TurmaIgnoraSenhaDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
@@ -97,4 +98,16 @@ public class Turma implements Serializable {
 		this.dataAtualizacao = obj.getDataAtualizacao();
 		this.alunos = obj.getAlunos();
 	}
+	
+	public Turma(TurmaIgnoraSenhaDTO obj) {
+		super();
+		this.id = obj.getId();
+		this.serie = obj.getSerie();
+		this.turma = obj.getTurma();
+		this.sala = obj.getSala();
+		this.periodo = obj.getPeriodo();
+		this.dataAtualizacao = obj.getDataAtualizacao();
+		this.alunos = obj.getAlunos();
+	}
+	
 }

@@ -20,8 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.brandaoti.escolar.domain.Aula;
+import com.brandaoti.escolar.domain.Disciplina;
+import com.brandaoti.escolar.domain.Turma;
 import com.brandaoti.escolar.dtos.AulaDTO;
+import com.brandaoti.escolar.dtos.TurmaIgnoraSenhaDTO;
 import com.brandaoti.escolar.services.AulaService;
+import com.brandaoti.escolar.services.DisciplinaService;
+import com.brandaoti.escolar.services.TurmaService;
 
 @RestController
 @RequestMapping(value = "/aulas")
@@ -29,6 +34,13 @@ public class AulaResource {
 
 	@Autowired
 	private AulaService aulaService;
+	
+	@Autowired
+	private TurmaService turmaService;
+	
+	@Autowired
+	private DisciplinaService disciplinaService;
+	
 	
 	@GetMapping(value = "/{id}")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR', 'ALUNO', 'VISITANTE')")
@@ -56,7 +68,17 @@ public class AulaResource {
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<AulaDTO> update(@PathVariable Integer id, @Valid @RequestBody AulaDTO objDTO) {
+		Disciplina disciplina = disciplinaService.findNomeDisciplina(objDTO.getDisciplina().getNomeDisciplina());
+		objDTO.setDisciplina(disciplina);
 		Aula obj = aulaService.update(id, objDTO);
+		// Atualizando turma
+		Turma turmaAntiga = turmaService.findById(objDTO.getTurma().getId());
+		TurmaIgnoraSenhaDTO turmaAtualizada = new TurmaIgnoraSenhaDTO(turmaAntiga);
+		turmaAtualizada.setSerie(objDTO.getTurma().getSerie());
+		turmaAtualizada.setTurma(objDTO.getTurma().getTurma());
+		turmaAtualizada.setSala(objDTO.getTurma().getSala());
+		turmaService.updateIgnorandoSenha(turmaAtualizada.getId(), turmaAtualizada);
+		
 		return ResponseEntity.ok().body(new AulaDTO(obj));
 	}
 	

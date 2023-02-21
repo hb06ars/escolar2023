@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.brandaoti.escolar.domain.Turma;
 import com.brandaoti.escolar.dtos.TurmaDTO;
+import com.brandaoti.escolar.dtos.TurmaIgnoraSenhaDTO;
 import com.brandaoti.escolar.exceptions.ObjectNotFoundException;
 import com.brandaoti.escolar.repositories.TurmaRepository;
 
@@ -42,6 +43,13 @@ public class TurmaService {
 		return turmaRepository.save(oldObj);
 	}
 
+	public Turma updateIgnorandoSenha(Integer id, @Valid TurmaIgnoraSenhaDTO objDTO) {
+		objDTO.setId(id);
+		Turma oldObj = findById(id);
+		oldObj = new Turma(objDTO);
+		return turmaRepository.save(oldObj);
+	}
+	
 	public void delete(Integer id) {
 		turmaRepository.deleteById(id);
 	}
