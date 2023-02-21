@@ -90,18 +90,18 @@ public class DBService {
 		usuarioRepository.save(new Usuario(null, "Maria visitante", "10911709088", "faddsfaa@mail.com", encoder.encode("123"), "(11)98888-8888", perfilRepository.findPerfilVisitante().get()));
 				
 		// DISCIPLINA
-		disciplinaRepository.save(new Disciplina(null, 1, "PORTUGUÊS", null));
-		disciplinaRepository.save(new Disciplina(null, 2, "MATEMÁTICA", null));
-		disciplinaRepository.save(new Disciplina(null, 3, "CIÊNCIAS", null));
-		disciplinaRepository.save(new Disciplina(null, 4, "HISTÓRIA", null));
-		disciplinaRepository.save(new Disciplina(null, 5, "GEOGRAFIA", null));
-		disciplinaRepository.save(new Disciplina(null, 6, "INGLÊS", null));
-		disciplinaRepository.save(new Disciplina(null, 7, "ARTES", null));
-		disciplinaRepository.save(new Disciplina(null, 8, "ED. FÍSICA", null));
-		disciplinaRepository.save(new Disciplina(null, 9, "QUÍMICA", null));
-		disciplinaRepository.save(new Disciplina(null, 10, "FÍSICA", null));
-		disciplinaRepository.save(new Disciplina(null, 11, "BIOLOGIA", null));
-		disciplinaRepository.save(new Disciplina(null, 12, "SOCIOLOGIA", null));
+		disciplinaRepository.save(new Disciplina(null, 1, "PORTUGUÊS"));
+		disciplinaRepository.save(new Disciplina(null, 2, "MATEMÁTICA"));
+		disciplinaRepository.save(new Disciplina(null, 3, "CIÊNCIAS"));
+		disciplinaRepository.save(new Disciplina(null, 4, "HISTÓRIA"));
+		disciplinaRepository.save(new Disciplina(null, 5, "GEOGRAFIA"));
+		disciplinaRepository.save(new Disciplina(null, 6, "INGLÊS"));
+		disciplinaRepository.save(new Disciplina(null, 7, "ARTES"));
+		disciplinaRepository.save(new Disciplina(null, 8, "ED. FÍSICA"));
+		disciplinaRepository.save(new Disciplina(null, 9, "QUÍMICA"));
+		disciplinaRepository.save(new Disciplina(null, 10, "FÍSICA"));
+		disciplinaRepository.save(new Disciplina(null, 11, "BIOLOGIA"));
+		disciplinaRepository.save(new Disciplina(null, 12, "SOCIOLOGIA"));
 
 		// TURMA
 		turmaRepository.save(new Turma(null, 5, "H", 1, EnumPeriodo.MANHA, null, alunoRepository.findAll()));

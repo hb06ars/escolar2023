@@ -22,6 +22,11 @@ public class TurmaDTO {
 	protected LocalDate dataAtualizacao;
 	protected List<Usuario> alunos;
 	
+	public TurmaDTO() {
+		super();
+	}
+
+	
 	public TurmaDTO(Turma obj) {
 		super();
 		this.id = obj.getId();

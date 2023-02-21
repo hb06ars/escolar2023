@@ -1,7 +1,6 @@
 package com.brandaoti.escolar.domain;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.brandaoti.escolar.dtos.DisciplinaDTO;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,22 +31,17 @@ public class Disciplina implements Serializable {
 	@Column(unique = true)
 	protected String nomeDisciplina;
 	
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	@Column
-	protected LocalDate dataAtualizacao = LocalDate.now();
-
 	//Construtor da classe sem parâmetros
 	public Disciplina() {
 		super();
 	}
 	
 	//Construtor da classe com parâmetros
-	public Disciplina(Integer id, Integer codigo, String nomeDisciplina, LocalDate dataAtualizacao) {
+	public Disciplina(Integer id, Integer codigo, String nomeDisciplina) {
 		super();
 		this.id = id;
 		this.codigo = codigo;
 		this.nomeDisciplina = nomeDisciplina;
-		this.dataAtualizacao = dataAtualizacao;
 	}
 
 	public Disciplina(DisciplinaDTO obj) {
@@ -56,7 +49,6 @@ public class Disciplina implements Serializable {
 		this.id = obj.getId();
 		this.codigo = obj.getCodigo();
 		this.nomeDisciplina = obj.getNomeDisciplina();
-		this.dataAtualizacao = obj.getDataAtualizacao();
 	}
 	
 }

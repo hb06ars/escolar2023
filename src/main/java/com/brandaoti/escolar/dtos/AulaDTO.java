@@ -28,6 +28,11 @@ public class AulaDTO {
 	protected Usuario professor;
 	protected Usuario professorSubstituto;
 	
+	public AulaDTO() {
+		super();
+	}
+	
+	
 	public AulaDTO(Aula obj) {
 		super();
 		this.id = obj.getId();
