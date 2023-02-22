@@ -48,6 +48,7 @@ public class TurmaResource {
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	@PostMapping
 	public ResponseEntity<TurmaDTO> create(@Valid @RequestBody TurmaDTO objDTO) {
+		objDTO.setAlunos(null);
 		Turma newObj = turmaService.create(objDTO);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
