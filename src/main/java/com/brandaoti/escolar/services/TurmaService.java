@@ -54,5 +54,9 @@ public class TurmaService {
 		turmaRepository.deleteById(id);
 	}
 
-
+	public Turma findBySerieTurma(Integer serie, String turma) {
+		Optional<Turma> obj = turmaRepository.findBySerieAndTurma(serie, turma);  //Optional, pode ou nao encontrar o obj
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Turma não encontrada: " + serie+"ª"+turma));
+	}
+	
 }

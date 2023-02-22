@@ -22,10 +22,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.brandaoti.escolar.domain.Aula;
 import com.brandaoti.escolar.domain.Disciplina;
 import com.brandaoti.escolar.domain.Turma;
+import com.brandaoti.escolar.domain.Usuario;
 import com.brandaoti.escolar.dtos.AulaDTO;
 import com.brandaoti.escolar.dtos.TurmaIgnoraSenhaDTO;
 import com.brandaoti.escolar.services.AulaService;
 import com.brandaoti.escolar.services.DisciplinaService;
+import com.brandaoti.escolar.services.ProfessorService;
 import com.brandaoti.escolar.services.TurmaService;
 
 @RestController
@@ -40,6 +42,9 @@ public class AulaResource {
 	
 	@Autowired
 	private DisciplinaService disciplinaService;
+	
+	@Autowired
+	private ProfessorService professorService;
 	
 	
 	@GetMapping(value = "/{id}")
@@ -60,6 +65,21 @@ public class AulaResource {
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	@PostMapping
 	public ResponseEntity<AulaDTO> create(@Valid @RequestBody AulaDTO objDTO) {
+		
+		Disciplina disciplina = disciplinaService.findNomeDisciplina(objDTO.getDisciplina().getNomeDisciplina());
+		Usuario professor = professorService.buscarIdProfessor(Integer.parseInt(objDTO.getProfessor().getNome().split(" - ")[0]));
+		objDTO.setDisciplina(disciplina);
+		objDTO.setProfessor(professor);
+		// Atualizando turma
+		Turma turmaAntiga = turmaService.findBySerieTurma(objDTO.getTurma().getSerie(), objDTO.getTurma().getTurma());
+		TurmaIgnoraSenhaDTO turmaAtualizada = new TurmaIgnoraSenhaDTO(turmaAntiga);
+		turmaAtualizada.setSerie(objDTO.getTurma().getSerie());
+		turmaAtualizada.setTurma(objDTO.getTurma().getTurma());
+		turmaAtualizada.setSala(objDTO.getTurma().getSala());
+		turmaService.updateIgnorandoSenha(turmaAtualizada.getId(), turmaAtualizada);
+		turmaAntiga = turmaService.findBySerieTurma(objDTO.getTurma().getSerie(), objDTO.getTurma().getTurma());
+		objDTO.setTurma(turmaAntiga);
+		objDTO.setProfessorSubstituto(null);
 		Aula newObj = aulaService.create(objDTO);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
@@ -69,7 +89,9 @@ public class AulaResource {
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<AulaDTO> update(@PathVariable Integer id, @Valid @RequestBody AulaDTO objDTO) {
 		Disciplina disciplina = disciplinaService.findNomeDisciplina(objDTO.getDisciplina().getNomeDisciplina());
+		Usuario professor = professorService.buscarIdProfessor(Integer.parseInt(objDTO.getProfessor().getNome().split(" - ")[0]));
 		objDTO.setDisciplina(disciplina);
+		objDTO.setProfessor(professor);
 		Aula obj = aulaService.update(id, objDTO);
 		// Atualizando turma
 		Turma turmaAntiga = turmaService.findById(objDTO.getTurma().getId());

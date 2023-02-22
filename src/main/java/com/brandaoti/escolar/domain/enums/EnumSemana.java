@@ -7,11 +7,11 @@ public enum EnumSemana {
 
 	DOMINGO	(0, "DOMINGO"),
 	SEGUNDA	(1, "SEGUNDA"),
-	TERCA	(2, "TERÇA"	),
+	TERCA	(2, "TERCA"	),
 	QUARTA	(3, "QUARTA"),
 	QUINTA	(4, "QUINTA"),
 	SEXTA	(5, "SEXTA"),
-	SABADO	(6, "SÁBADO");
+	SABADO	(6, "SABADO");
 	
 	private Integer codigo;
 	private String descricao;
