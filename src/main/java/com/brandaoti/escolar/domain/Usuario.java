@@ -35,7 +35,7 @@ public class Usuario implements Serializable {
 	protected Integer id;
 	
 	@NotNull(message = "Digite um nome.")
-	@NotEmpty(message = "Digite um nome.")
+	@NotEmpty(message = "O nome está vazio.")
 	@Column
 	protected String nome;
 	
@@ -48,7 +48,7 @@ public class Usuario implements Serializable {
 	protected String email;
 	
 	@NotNull(message = "Digite uma senha.")
-	@NotEmpty(message = "Digite uma senha.")
+	@NotEmpty(message = "A senha está vazia.")
 	@Column
 	protected String senha;
 	

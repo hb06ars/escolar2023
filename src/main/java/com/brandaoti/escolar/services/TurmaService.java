@@ -42,7 +42,8 @@ public class TurmaService {
 		oldObj = new Turma(objDTO);
 		return turmaRepository.save(oldObj);
 	}
-
+	
+	
 	public Turma updateIgnorandoSenha(Integer id, @Valid TurmaIgnoraSenhaDTO objDTO) {
 		objDTO.setId(id);
 		Turma oldObj = findById(id);
@@ -57,6 +58,11 @@ public class TurmaService {
 	public Turma findBySerieTurma(Integer serie, String turma) {
 		Optional<Turma> obj = turmaRepository.findBySerieAndTurma(serie, turma);  //Optional, pode ou nao encontrar o obj
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Turma não encontrada: " + serie+"ª"+turma));
+	}
+	
+	public Turma findByTurmaDoAluno(Integer idAluno) {
+		Optional<Turma> obj = turmaRepository.findByTurmaDoAluno(idAluno);  //Optional, pode ou nao encontrar o obj
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Turma não encontrada. "));
 	}
 	
 }

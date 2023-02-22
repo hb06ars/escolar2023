@@ -1,6 +1,7 @@
 package com.brandaoti.escolar.resources;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,10 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.brandaoti.escolar.domain.Turma;
 import com.brandaoti.escolar.domain.Usuario;
+import com.brandaoti.escolar.dtos.TurmaIgnoraSenhaDTO;
 import com.brandaoti.escolar.dtos.UsuarioDTO;
 import com.brandaoti.escolar.services.AlunoService;
 import com.brandaoti.escolar.services.PerfilService;
+import com.brandaoti.escolar.services.TurmaService;
 
 @RestController
 @RequestMapping(value = "/alunos")
@@ -35,12 +39,33 @@ public class AlunoResource {
 	@Autowired
 	private PerfilService perfilService;
 	
+	@Autowired
+	private TurmaService turmaService;
+	
+	
 	@GetMapping(value = "/{id}")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR')")
 	public ResponseEntity<UsuarioDTO> findById(@PathVariable Integer id) {
 		Usuario obj = alunoService.buscarIdAluno(id);
 		obj.setSenha(null);
 		return ResponseEntity.ok().body(new UsuarioDTO(obj));
+	}
+	
+	@GetMapping(value = "/removerTurmaDoAluno/{idAluno}")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR')")
+	public ResponseEntity<TurmaIgnoraSenhaDTO> removerTurmaDoAluno(@PathVariable Integer idAluno) {
+		Turma t = turmaService.findByTurmaDoAluno(idAluno);
+		List<Usuario> lista = t.getAlunos();
+		for(int i = 0; i < lista.size(); i++) {
+			if(idAluno.equals(lista.get(i).getId())) {
+				lista.remove(i);
+				break;
+			}
+		}
+		t.setDataAtualizacao(LocalDate.now());
+		t.setAlunos(lista);
+		turmaService.updateIgnorandoSenha(t.getId(), new TurmaIgnoraSenhaDTO(t));
+		return ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping(value = "/listaralunos")
