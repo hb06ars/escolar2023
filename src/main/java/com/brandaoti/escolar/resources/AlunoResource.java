@@ -42,11 +42,20 @@ public class AlunoResource {
 		obj.setSenha(null);
 		return ResponseEntity.ok().body(new UsuarioDTO(obj));
 	}
-
+	
 	@GetMapping(value = "/listaralunos")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR')")
 	public ResponseEntity<List<UsuarioDTO>> findAllAlunos() {
 		Optional<List<Usuario>> list = alunoService.buscarTodosAlunos();
+		List<UsuarioDTO> listDTO = list.get().stream().map(obj -> new UsuarioDTO(obj)).collect(Collectors.toList());
+		listDTO.forEach(l -> l.setSenha(null));
+		return ResponseEntity.ok().body(listDTO);
+	}
+	
+	@GetMapping(value = "/listarTurmaDeAlunos/{turmaId}")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR')")
+	public ResponseEntity<List<UsuarioDTO>> listarTurmaDeAlunos(@PathVariable Integer turmaId) {
+		Optional<List<Usuario>> list = alunoService.listarTurmaDeAlunos(turmaId);
 		List<UsuarioDTO> listDTO = list.get().stream().map(obj -> new UsuarioDTO(obj)).collect(Collectors.toList());
 		listDTO.forEach(l -> l.setSenha(null));
 		return ResponseEntity.ok().body(listDTO);

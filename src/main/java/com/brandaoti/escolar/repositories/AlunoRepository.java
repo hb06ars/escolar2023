@@ -22,4 +22,8 @@ public interface AlunoRepository extends JpaRepository<Usuario, Integer>{
 	@Query("SELECT u FROM Usuario u WHERE upper(u.perfil.descricao) like 'ALUNO' ")
 	Optional<List<Usuario>> buscarTodosAlunos();
 	
+	@Query("SELECT t.alunos FROM Turma t WHERE t.id = :id")
+	Optional<List<Usuario>> listarTurmaDeAlunos(Integer id);
+	
+	
 }

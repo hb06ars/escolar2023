@@ -46,6 +46,10 @@ public class AlunoService {
 	public Optional<List<Usuario>> buscarTodosAlunos() {
 		return Repository.buscarTodosAlunos();
 	}
+	
+	public Optional<List<Usuario>> listarTurmaDeAlunos(Integer id) {
+		return Repository.listarTurmaDeAlunos(id);
+	}
 
 	public Usuario create(UsuarioDTO objDTO) {
 		objDTO.setId(null);
