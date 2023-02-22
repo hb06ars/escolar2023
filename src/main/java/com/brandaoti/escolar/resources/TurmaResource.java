@@ -62,6 +62,8 @@ public class TurmaResource {
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<TurmaDTO> update(@PathVariable Integer id, @Valid @RequestBody TurmaDTO objDTO) {
+		Turma turmaOld = turmaService.findById(id);
+		objDTO.setAlunos(turmaOld.getAlunos());
 		Turma obj = turmaService.update(id, objDTO);
 		return ResponseEntity.ok().body(new TurmaDTO(obj));
 	}

@@ -1,5 +1,6 @@
 package com.brandaoti.escolar.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +40,11 @@ public class TurmaService {
 	public Turma update(Integer id, @Valid TurmaDTO objDTO) {
 		objDTO.setId(id);
 		Turma oldObj = findById(id);
-		oldObj = new Turma(objDTO);
+		oldObj.setDataAtualizacao(LocalDate.now());
+		oldObj.setPeriodo(objDTO.getPeriodo());
+		oldObj.setSala(objDTO.getSala());
+		oldObj.setSerie(objDTO.getSerie());
+		oldObj.setTurma(objDTO.getTurma());
 		return turmaRepository.save(oldObj);
 	}
 	
