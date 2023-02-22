@@ -13,5 +13,9 @@ public interface TurmaRepository extends JpaRepository<Turma, Integer>{
 
 	@Query("SELECT t FROM Turma t inner join t.alunos a WHERE a.id IN (:idAluno)")
 	Optional<Turma> findByTurmaDoAluno(Integer idAluno);
+	
+	@Query("SELECT t FROM Turma t inner join t.alunos a WHERE a.cpf IN (:cpfAluno)")
+	Optional<Turma> findByTurmaDoAlunoPorCpf(String cpfAluno);
+
 
 }

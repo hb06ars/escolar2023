@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.brandaoti.escolar.domain.Turma;
 import com.brandaoti.escolar.domain.Usuario;
+import com.brandaoti.escolar.dtos.TurmaDTO;
 import com.brandaoti.escolar.dtos.TurmaIgnoraSenhaDTO;
 import com.brandaoti.escolar.dtos.UsuarioDTO;
 import com.brandaoti.escolar.services.AlunoService;
@@ -65,6 +66,40 @@ public class AlunoResource {
 		t.setDataAtualizacao(LocalDate.now());
 		t.setAlunos(lista);
 		turmaService.updateIgnorandoSenha(t.getId(), new TurmaIgnoraSenhaDTO(t));
+		return ResponseEntity.noContent().build();
+	}
+	
+	
+	@GetMapping(value = "/adicionarAlunoNaTurma/{cpfAluno}/{idTurma}")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR')")
+	public ResponseEntity<TurmaIgnoraSenhaDTO> adicionarAlunoNaTurma(@PathVariable String cpfAluno, @PathVariable Integer idTurma) {
+		Optional<Turma> turmaAtual = turmaService.findByTurmaDoAlunoPorCpf(cpfAluno);
+		Usuario aluno = alunoService.buscarCpfAluno(cpfAluno);
+		Turma turmaNova = turmaService.findById(idTurma);
+		
+		if(turmaAtual.isPresent()) {
+			for(int i = 0; i < turmaAtual.get().getAlunos().size(); i++) {
+				if(turmaAtual.get().getAlunos().get(i).getCpf().equals(cpfAluno)) {
+					turmaAtual.get().getAlunos().remove(i);
+					turmaService.update(turmaAtual.get().getId(), new TurmaDTO(turmaAtual.get()));
+					break;
+				}
+			}
+		}
+		
+		turmaNova.getAlunos().add(aluno);
+		turmaService.update(turmaNova.getId(), new TurmaDTO(turmaNova));
+		
+//		List<Usuario> lista = t.getAlunos();
+//		for(int i = 0; i < lista.size(); i++) {
+//			if(idAluno.equals(lista.get(i).getId())) {
+//				lista.remove(i);
+//				break;
+//			}
+//		}
+//		t.setDataAtualizacao(LocalDate.now());
+//		t.setAlunos(lista);
+//		turmaService.updateIgnorandoSenha(t.getId(), new TurmaIgnoraSenhaDTO(t));
 		return ResponseEntity.noContent().build();
 	}
 	

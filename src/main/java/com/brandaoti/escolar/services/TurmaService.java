@@ -70,4 +70,8 @@ public class TurmaService {
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Turma não encontrada. "));
 	}
 	
+	public Optional<Turma> findByTurmaDoAlunoPorCpf(String cpfAluno) {
+		return turmaRepository.findByTurmaDoAlunoPorCpf(cpfAluno);  //Optional, pode ou nao encontrar o obj
+	}
+	
 }
