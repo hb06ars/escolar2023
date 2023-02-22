@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.brandaoti.escolar.domain.Aula;
 import com.brandaoti.escolar.domain.Turma;
 import com.brandaoti.escolar.dtos.TurmaDTO;
+import com.brandaoti.escolar.services.AulaService;
 import com.brandaoti.escolar.services.TurmaService;
 
 @RestController
@@ -29,6 +31,9 @@ public class TurmaResource {
 
 	@Autowired
 	private TurmaService turmaService;
+	
+	@Autowired
+	private AulaService aulaService;
 	
 	@GetMapping(value = "/{id}")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR', 'ALUNO')")
@@ -64,6 +69,16 @@ public class TurmaResource {
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<TurmaDTO> delete(@PathVariable Integer id) {
+		Turma turma = turmaService.findById(id);
+		turma.setAlunos(null);
+		turmaService.update(id, new TurmaDTO(turma));
+		
+		List<Aula> listaAulas = aulaService.buscarTurma(id);
+		listaAulas.stream().forEach(l ->{
+			l.setTurma(null);
+		});
+		aulaService.saveAll(listaAulas);
+		
 		turmaService.delete(id); 
 		return ResponseEntity.noContent().build();
 	}

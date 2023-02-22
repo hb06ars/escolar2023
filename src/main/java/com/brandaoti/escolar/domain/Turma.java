@@ -96,7 +96,8 @@ public class Turma implements Serializable {
 		this.sala = obj.getSala();
 		this.periodo = obj.getPeriodo();
 		this.dataAtualizacao = obj.getDataAtualizacao();
-		this.alunos = obj.getAlunos();
+		if(this.alunos != null)
+			this.alunos = obj.getAlunos();
 	}
 	
 	public Turma(TurmaIgnoraSenhaDTO obj) {

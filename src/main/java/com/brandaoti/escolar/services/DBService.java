@@ -104,7 +104,7 @@ public class DBService {
 		disciplinaRepository.save(new Disciplina(null, 12, "SOCIOLOGIA"));
 
 		// TURMA
-		turmaRepository.save(new Turma(null, 5, "H", 1, EnumPeriodo.MANHA, null, alunoRepository.findAll()));
+		turmaRepository.save(new Turma(null, 5, "H", 1, EnumPeriodo.MANHA, null, alunoRepository.buscarTodosAlunos().get()));
 
 		
 		// AULA

@@ -28,7 +28,16 @@ public class AulaService {
 	public List<Aula> findAll() {
 		return aulaRepository.findAll();
 	}
+	
+	public List<Aula> buscarTurma(Integer id) {
+		return aulaRepository.buscarTurma(id);
+	}
 
+
+	public List<Aula> saveAll(List<Aula> lista) {
+		return aulaRepository.saveAll(lista);
+	}
+	
 	public Aula create(AulaDTO objDTO) {
 		objDTO.setId(null);
 		Aula newObj = new Aula(objDTO);
