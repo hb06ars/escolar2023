@@ -89,17 +89,6 @@ public class AlunoResource {
 		
 		turmaNova.getAlunos().add(aluno);
 		turmaService.update(turmaNova.getId(), new TurmaDTO(turmaNova));
-		
-//		List<Usuario> lista = t.getAlunos();
-//		for(int i = 0; i < lista.size(); i++) {
-//			if(idAluno.equals(lista.get(i).getId())) {
-//				lista.remove(i);
-//				break;
-//			}
-//		}
-//		t.setDataAtualizacao(LocalDate.now());
-//		t.setAlunos(lista);
-//		turmaService.updateIgnorandoSenha(t.getId(), new TurmaIgnoraSenhaDTO(t));
 		return ResponseEntity.noContent().build();
 	}
 	

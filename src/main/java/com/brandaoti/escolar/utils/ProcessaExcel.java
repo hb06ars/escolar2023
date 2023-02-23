@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -18,7 +19,7 @@ import com.brandaoti.escolar.domain.Tabela;
 public class ProcessaExcel {
 	
 	
-	public List<Tabela> uploadAlunos(@ModelAttribute MultipartFile file) throws Exception {
+	public List<Tabela> processar(@ModelAttribute MultipartFile file) throws Exception {
 		List<Tabela> tabelas = new ArrayList<Tabela>();
 		int linha = 1;
 		int coluna = 0;
@@ -42,20 +43,12 @@ public class ProcessaExcel {
 				Iterator<Cell> cellIterator = row.cellIterator();
 				while (cellIterator.hasNext()) {
 					Cell cell = cellIterator.next();
-						if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
-							Tabela tabela = new Tabela();
-							tabela.setLinha(linha);
-							tabela.setConteudo(cell.getStringCellValue());
-							tabela.setColuna(coluna);
-							tabelas.add(tabela);
-						}
-						else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-							Tabela tabela = new Tabela();
-							tabela.setLinha(linha);
-							tabela.setConteudo(cell.getNumericCellValue() + "");
-							tabela.setColuna(coluna);
-							tabelas.add(tabela);
-						}
+					cell.setCellType(CellType.STRING);
+					Tabela tabela = new Tabela();
+					tabela.setLinha(linha);
+					tabela.setConteudo(cell.getStringCellValue());
+					tabela.setColuna(coluna);
+					tabelas.add(tabela);
 					coluna++;
 				}
 				linha++;

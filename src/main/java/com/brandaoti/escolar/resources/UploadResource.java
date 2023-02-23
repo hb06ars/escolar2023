@@ -18,7 +18,6 @@ import com.brandaoti.escolar.domain.Turma;
 import com.brandaoti.escolar.domain.Usuario;
 import com.brandaoti.escolar.domain.enums.EnumPeriodo;
 import com.brandaoti.escolar.domain.enums.EnumSemana;
-import com.brandaoti.escolar.dtos.AulaDTO;
 import com.brandaoti.escolar.dtos.TurmaIgnoraSenhaDTO;
 import com.brandaoti.escolar.dtos.UsuarioDTO;
 import com.brandaoti.escolar.services.AlunoService;
@@ -55,7 +54,7 @@ public class UploadResource {
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR', 'ALUNO')")
 	public ResponseEntity<String> uploadAlunos(@RequestParam("file")MultipartFile file) throws Exception {
 		ProcessaExcel processaExcel = new ProcessaExcel();
-		List<Tabela> tabelas = processaExcel.uploadAlunos(file);
+		List<Tabela> tabelas = processaExcel.processar(file);
 		Usuario aluno = new Usuario();
     	for(Tabela t : tabelas) {
     		switch (t.getColuna()) {
@@ -88,7 +87,7 @@ public class UploadResource {
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR', 'ALUNO')")
 	public ResponseEntity<String> uploadAulas(@RequestParam("file") MultipartFile file) throws Exception {
 		ProcessaExcel processaExcel = new ProcessaExcel();
-		List<Tabela> tabelas = processaExcel.uploadAlunos(file);
+		List<Tabela> tabelas = processaExcel.processar(file);
 		Aula aula = new Aula();
     	for(Tabela t : tabelas) {
     		switch (t.getColuna()) {
@@ -116,15 +115,7 @@ public class UploadResource {
     				break;
     			case 6 :
     				aula.setProfessor(professorService.buscarIdProfessor(Integer.parseInt(t.getConteudo().split(" - ")[0])));
-    				Turma turmaAntiga = turmaService.findBySerieTurma(aula.getTurma().getSerie(), aula.getTurma().getTurma());
-    				TurmaIgnoraSenhaDTO turmaAtualizada = new TurmaIgnoraSenhaDTO(turmaAntiga);
-    				turmaAtualizada.setSerie(aula.getTurma().getSerie());
-    				turmaAtualizada.setTurma(aula.getTurma().getTurma());
-    				turmaAtualizada.setSala(aula.getTurma().getSala());
-    				turmaAntiga = turmaService.findBySerieTurma(aula.getTurma().getSerie(), aula.getTurma().getTurma());
-    				aula.setTurma(turmaAntiga);
-    				aula.setProfessorSubstituto(null);
-    				aulaService.salvarComSenha(aula);
+    				salvarAula(aula);
     				break;
     			default:
     				break;
@@ -132,6 +123,19 @@ public class UploadResource {
     	}
     	
 		return ResponseEntity.ok().body("Upload efetuado com sucesso.");
+	}
+
+
+	private void salvarAula(Aula aula) {
+		Turma turmaAntiga = turmaService.findBySerieTurma(aula.getTurma().getSerie(), aula.getTurma().getTurma());
+		TurmaIgnoraSenhaDTO turmaAtualizada = new TurmaIgnoraSenhaDTO(turmaAntiga);
+		turmaAtualizada.setSerie(aula.getTurma().getSerie());
+		turmaAtualizada.setTurma(aula.getTurma().getTurma());
+		turmaAtualizada.setSala(aula.getTurma().getSala());
+		turmaAntiga = turmaService.findBySerieTurma(aula.getTurma().getSerie(), aula.getTurma().getTurma());
+		aula.setTurma(turmaAntiga);
+		aula.setProfessorSubstituto(null);
+		aulaService.salvarComSenha(aula);
 	}
 	
 
