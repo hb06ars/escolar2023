@@ -43,8 +43,8 @@ public class UploadResource {
 	@PostMapping(value = "/uploadaulas")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR', 'ALUNO')")
 	public ResponseEntity<String> uploadAulas(@RequestParam("file") MultipartFile file) throws Exception {
-		//ProcessaExcel processaExcel = new ProcessaExcel();
-		//List<Tabela> tabelas = processaExcel.uploadAlunos(arquivo);
+		ProcessaExcel processaExcel = new ProcessaExcel();
+		List<Tabela> tabelas = processaExcel.uploadAlunos(file);
     	
 		return ResponseEntity.ok().body("Upload efetuado com sucesso.");
 	}
