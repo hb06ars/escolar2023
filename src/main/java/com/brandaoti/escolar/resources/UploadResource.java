@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.brandaoti.escolar.domain.Tabela;
+import com.brandaoti.escolar.domain.Usuario;
+import com.brandaoti.escolar.dtos.UsuarioDTO;
 import com.brandaoti.escolar.services.AlunoService;
-import com.brandaoti.escolar.services.AulaService;
-import com.brandaoti.escolar.services.TurmaService;
+import com.brandaoti.escolar.services.PerfilService;
 import com.brandaoti.escolar.utils.ProcessaExcel;
 
 @RestController
@@ -22,19 +23,39 @@ import com.brandaoti.escolar.utils.ProcessaExcel;
 public class UploadResource {
 
 	@Autowired
-	private TurmaService turmaService;
+	private AlunoService alunoService;
 	
 	@Autowired
-	private AulaService aulaService;
-
-	@Autowired
-	private AlunoService alunoService;
+	private PerfilService perfilService;
 
 	@PostMapping(value = "/uploadalunos" )
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR', 'ALUNO')")
 	public ResponseEntity<String> uploadAlunos(@RequestParam("file")MultipartFile file) throws Exception {
 		ProcessaExcel processaExcel = new ProcessaExcel();
 		List<Tabela> tabelas = processaExcel.uploadAlunos(file);
+		Usuario aluno = new Usuario();
+    	for(Tabela t : tabelas) {
+    		switch (t.getColuna()) {
+    			case 0 :
+    				aluno = new Usuario();
+    				aluno.setNome(t.getConteudo());
+    				break;
+    			case 1 :
+    				aluno.setCpf(t.getConteudo());
+    				break;
+    			case 2 :
+    				aluno.setTelefone(t.getConteudo());
+    				break;
+    			case 3 :
+    				aluno.setEmail(t.getConteudo());
+    				aluno.setSenha(aluno.getCpf());
+    				aluno.setPerfil(perfilService.findPerfilAluno());
+    				alunoService.create(new UsuarioDTO(aluno));
+    				break;
+    			default:
+    				break;
+    		}
+    	}
     	
 		return ResponseEntity.ok().body("Upload efetuado com sucesso.");
 	}
