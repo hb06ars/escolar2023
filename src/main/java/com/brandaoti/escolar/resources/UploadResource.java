@@ -32,9 +32,9 @@ public class UploadResource {
 
 	@PostMapping(value = "/uploadalunos" )
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR', 'ALUNO')")
-	public ResponseEntity<String> uploadAlunos(@RequestParam("file")MultipartFile arquivo) throws Exception {
+	public ResponseEntity<String> uploadAlunos(@RequestParam("file")MultipartFile file) throws Exception {
 		ProcessaExcel processaExcel = new ProcessaExcel();
-		List<Tabela> tabelas = processaExcel.uploadAlunos(arquivo);
+		List<Tabela> tabelas = processaExcel.uploadAlunos(file);
     	
 		return ResponseEntity.ok().body("Upload efetuado com sucesso.");
 	}
@@ -42,9 +42,9 @@ public class UploadResource {
 	
 	@PostMapping(value = "/uploadaulas")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR', 'ALUNO')")
-	public ResponseEntity<String> uploadAulas(@RequestParam("file") MultipartFile arquivo) throws Exception {
-		ProcessaExcel processaExcel = new ProcessaExcel();
-		List<Tabela> tabelas = processaExcel.uploadAlunos(arquivo);
+	public ResponseEntity<String> uploadAulas(@RequestParam("file") MultipartFile file) throws Exception {
+		//ProcessaExcel processaExcel = new ProcessaExcel();
+		//List<Tabela> tabelas = processaExcel.uploadAlunos(arquivo);
     	
 		return ResponseEntity.ok().body("Upload efetuado com sucesso.");
 	}
