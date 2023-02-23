@@ -14,10 +14,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.brandaoti.escolar.domain.Aula;
 import com.brandaoti.escolar.domain.Tabela;
+import com.brandaoti.escolar.domain.Turma;
 import com.brandaoti.escolar.domain.Usuario;
 import com.brandaoti.escolar.domain.enums.EnumPeriodo;
 import com.brandaoti.escolar.domain.enums.EnumSemana;
 import com.brandaoti.escolar.dtos.AulaDTO;
+import com.brandaoti.escolar.dtos.TurmaIgnoraSenhaDTO;
 import com.brandaoti.escolar.dtos.UsuarioDTO;
 import com.brandaoti.escolar.services.AlunoService;
 import com.brandaoti.escolar.services.AulaService;
@@ -112,9 +114,17 @@ public class UploadResource {
     					t.getConteudo().toUpperCase().split("ª")[1].toUpperCase())
     				);
     				break;
-    			case 9 :
+    			case 6 :
     				aula.setProfessor(professorService.buscarIdProfessor(Integer.parseInt(t.getConteudo().split(" - ")[0])));
-    				aulaService.create(new AulaDTO(aula));
+    				Turma turmaAntiga = turmaService.findBySerieTurma(aula.getTurma().getSerie(), aula.getTurma().getTurma());
+    				TurmaIgnoraSenhaDTO turmaAtualizada = new TurmaIgnoraSenhaDTO(turmaAntiga);
+    				turmaAtualizada.setSerie(aula.getTurma().getSerie());
+    				turmaAtualizada.setTurma(aula.getTurma().getTurma());
+    				turmaAtualizada.setSala(aula.getTurma().getSala());
+    				turmaAntiga = turmaService.findBySerieTurma(aula.getTurma().getSerie(), aula.getTurma().getTurma());
+    				aula.setTurma(turmaAntiga);
+    				aula.setProfessorSubstituto(null);
+    				aulaService.salvarComSenha(aula);
     				break;
     			default:
     				break;

@@ -54,6 +54,11 @@ public class AulaService {
 	public void delete(Integer id) {
 		aulaRepository.deleteById(id);
 	}
+	
+	public Aula salvarComSenha(Aula obj) {
+		obj.setId(null);
+		return aulaRepository.save(obj);
+	}
 
 
 }
