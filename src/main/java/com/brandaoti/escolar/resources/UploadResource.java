@@ -18,6 +18,7 @@ import com.brandaoti.escolar.domain.Turma;
 import com.brandaoti.escolar.domain.Usuario;
 import com.brandaoti.escolar.domain.enums.EnumPeriodo;
 import com.brandaoti.escolar.domain.enums.EnumSemana;
+import com.brandaoti.escolar.dtos.TurmaDTO;
 import com.brandaoti.escolar.dtos.TurmaIgnoraSenhaDTO;
 import com.brandaoti.escolar.dtos.UsuarioDTO;
 import com.brandaoti.escolar.services.AlunoService;
@@ -125,6 +126,38 @@ public class UploadResource {
 		return ResponseEntity.ok().body("Upload efetuado com sucesso.");
 	}
 
+	
+	@PostMapping(value = "/uploadturmas")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR', 'ALUNO')")
+	public ResponseEntity<String> uploadTurmas(@RequestParam("file") MultipartFile file) throws Exception {
+		ProcessaExcel processaExcel = new ProcessaExcel();
+		List<Tabela> tabelas = processaExcel.processar(file);
+		Turma turma = new Turma();
+    	for(Tabela t : tabelas) {
+    		switch (t.getColuna()) {
+    			case 0 :
+    				turma = new Turma();
+    				turma.setSerie(Integer.parseInt(t.getConteudo().toUpperCase()));
+    				break;
+    			case 1 :
+    				turma.setTurma(t.getConteudo().toUpperCase());
+    				break;
+    			case 2 :
+    				turma.setSala(Integer.parseInt(t.getConteudo().toUpperCase()));
+    				break;
+    			case 3 :
+    				turma.setPeriodo(EnumPeriodo.valueOf(t.getConteudo().toUpperCase()));
+    				turmaService.create(new TurmaDTO(turma));
+    				break;
+    			default:
+    				break;
+    		}
+    	}
+    	
+		return ResponseEntity.ok().body("Upload efetuado com sucesso.");
+	}
+	
+	
 
 	private void salvarAula(Aula aula) {
 		Turma turmaAntiga = turmaService.findBySerieTurma(aula.getTurma().getSerie(), aula.getTurma().getTurma());
