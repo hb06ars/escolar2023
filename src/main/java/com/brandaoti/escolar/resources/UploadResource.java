@@ -1,5 +1,6 @@
 package com.brandaoti.escolar.resources;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -71,9 +72,24 @@ public class UploadResource {
     				break;
     			case 3 :
     				aluno.setEmail(t.getConteudo());
+    				break;
+    			case 4 :
     				aluno.setSenha(aluno.getCpf());
     				aluno.setPerfil(perfilService.findPerfilAluno());
-    				alunoService.create(new UsuarioDTO(aluno));
+    				aluno = alunoService.create(new UsuarioDTO(aluno));
+    				aluno = alunoService.buscarIdAluno(aluno.getId());
+    				if(t.getConteudo() != null) {
+    					Turma turma = turmaService.findBySerieTurma(Integer.parseInt(t.getConteudo().split("º")[0]), t.getConteudo().split("º")[1]);
+    					if(turma != null && turma.getId() != null) {
+    						if(turma.getAlunos() != null && turma.getAlunos().size() > 0) {
+    							turma.setDataAtualizacao(LocalDate.now());
+    							turma.getAlunos().add(aluno);
+    						} else {
+    							turma.getAlunos().add(aluno);
+    							turma.setDataAtualizacao(LocalDate.now());
+    						}
+    					}
+    				}
     				break;
     			default:
     				break;
