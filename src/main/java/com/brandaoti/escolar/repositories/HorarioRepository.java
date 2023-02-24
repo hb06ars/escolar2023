@@ -11,6 +11,8 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.brandaoti.escolar.domain.Horario;
+import com.brandaoti.escolar.domain.enums.EnumPeriodo;
+import com.brandaoti.escolar.domain.enums.EnumSemana;
 
 @Repository
 public class HorarioRepository {
@@ -47,6 +49,7 @@ public class HorarioRepository {
 	}
 	
 	private String getSql(String diaDaSemana, String periodo) {
+		
 		StringBuilder sql = new StringBuilder();
 		sql.append("select a.id as idAula, t.sala, a.inicio_aula inicio, a.fim_aula fim, d.nome_disciplina disciplina, prof.nome professor, subs.nome professorSubstituto ");
 		sql.append("from aula a ");
@@ -54,7 +57,8 @@ public class HorarioRepository {
 		sql.append("inner join disciplina d on d.id = a.disciplina_id ");
 		sql.append("inner join usuario prof on prof.id = a.professor_id ");
 		sql.append("left join usuario subs on subs.id = a.professor_substituto_id ");
-		sql.append("where a.dia_da_semana = 4 and a.periodo = 1 ");
+		sql.append("where a.dia_da_semana = "+EnumSemana.valueOf(diaDaSemana).getCodigo()+" ");
+		sql.append("and a.periodo = "+EnumPeriodo.valueOf(periodo).getCodigo()+" ");
 		sql.append("order by a.inicio_aula asc, t.sala asc;");
 		return sql.toString();
 	}
