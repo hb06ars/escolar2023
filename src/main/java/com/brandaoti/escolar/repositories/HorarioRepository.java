@@ -21,7 +21,7 @@ public class HorarioRepository {
 	EntityManager entityManager;
 
 	@SuppressWarnings("unchecked")
-	public List<Horario> buscarHorario(String diaDaSemana, String periodo) {
+	public List<Horario> buscarHorario(Integer diaDaSemana, Integer periodo) {
 		Query query = entityManager.createNativeQuery(getSql(diaDaSemana, periodo));
 		List<Object> listaHorarios = query.getResultList();
 		List<Horario> horarios = new ArrayList<>();
@@ -48,7 +48,7 @@ public class HorarioRepository {
 		return horarios;
 	}
 	
-	private String getSql(String diaDaSemana, String periodo) {
+	private String getSql(Integer diaDaSemana, Integer periodo) {
 		
 		StringBuilder sql = new StringBuilder();
 		sql.append("select a.id as idAula, t.sala, a.inicio_aula inicio, a.fim_aula fim, d.nome_disciplina disciplina, prof.nome professor, subs.nome professorSubstituto ");
@@ -57,8 +57,8 @@ public class HorarioRepository {
 		sql.append("inner join disciplina d on d.id = a.disciplina_id ");
 		sql.append("inner join usuario prof on prof.id = a.professor_id ");
 		sql.append("left join usuario subs on subs.id = a.professor_substituto_id ");
-		sql.append("where a.dia_da_semana = "+EnumSemana.valueOf(diaDaSemana).getCodigo()+" ");
-		sql.append("and a.periodo = "+EnumPeriodo.valueOf(periodo).getCodigo()+" ");
+		sql.append("where a.dia_da_semana = "+EnumSemana.toEnum(diaDaSemana).getCodigo()+" ");
+		sql.append("and a.periodo = "+EnumPeriodo.toEnum(periodo).getCodigo()+" ");
 		sql.append("order by a.inicio_aula asc, t.sala asc;");
 		return sql.toString();
 	}

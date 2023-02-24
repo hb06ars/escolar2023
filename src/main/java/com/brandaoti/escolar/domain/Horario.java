@@ -1,6 +1,5 @@
 package com.brandaoti.escolar.domain;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 import javax.persistence.Column;
@@ -14,9 +13,6 @@ public class Horario {
 	
 	@Column(name="idAula")
 	private Integer idAula;
-	
-	@Column(name="codigo")
-	private Integer codigo;
 	
 	@Column(name="sala")
 	private Integer sala;

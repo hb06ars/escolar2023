@@ -22,7 +22,7 @@ public class HorarioResource {
 
 	@GetMapping(value = "/{diaDaSemana}/{periodo}")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR', 'ALUNO', 'VISITANTE')")
-	public ResponseEntity<List<Horario>> findById(@PathVariable String diaDaSemana, @PathVariable String periodo) {
+	public ResponseEntity<List<Horario>> findById(@PathVariable Integer diaDaSemana, @PathVariable Integer periodo) {
 		
 		List<Horario> horario = horarioRepository.buscarHorario(diaDaSemana, periodo);
 		System.out.println(horario.size());
