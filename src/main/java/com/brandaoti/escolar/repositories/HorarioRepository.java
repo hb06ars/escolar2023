@@ -55,7 +55,7 @@ public class HorarioRepository {
 		sql.append("from aula a ");
 		sql.append("inner join turma t on t.id = a.turma_id ");
 		sql.append("inner join disciplina d on d.id = a.disciplina_id ");
-		sql.append("inner join usuario prof on prof.id = a.professor_id ");
+		sql.append("left join usuario prof on prof.id = a.professor_id ");
 		sql.append("left join usuario subs on subs.id = a.professor_substituto_id ");
 		sql.append("where a.dia_da_semana = "+EnumSemana.toEnum(diaDaSemana).getCodigo()+" ");
 		sql.append("and a.periodo = "+EnumPeriodo.toEnum(periodo).getCodigo()+" ");
