@@ -1,6 +1,8 @@
 package com.brandaoti.escolar.resources;
 
 import java.net.URI;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,6 +11,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,16 +26,21 @@ import com.brandaoti.escolar.domain.Aula;
 import com.brandaoti.escolar.domain.Disciplina;
 import com.brandaoti.escolar.domain.Turma;
 import com.brandaoti.escolar.domain.Usuario;
+import com.brandaoti.escolar.domain.enums.EnumSemana;
 import com.brandaoti.escolar.dtos.AulaDTO;
 import com.brandaoti.escolar.dtos.TurmaIgnoraSenhaDTO;
 import com.brandaoti.escolar.services.AulaService;
 import com.brandaoti.escolar.services.DisciplinaService;
 import com.brandaoti.escolar.services.ProfessorService;
 import com.brandaoti.escolar.services.TurmaService;
+import com.brandaoti.escolar.services.UsuarioService;
 
 @RestController
 @RequestMapping(value = "/aulas")
 public class AulaResource {
+	
+	@Autowired
+	private UsuarioService usuarioService;
 
 	@Autowired
 	private AulaService aulaService;
@@ -46,6 +54,30 @@ public class AulaResource {
 	@Autowired
 	private ProfessorService professorService;
 	
+	// AULAS DA SEMANA
+	@GetMapping(value = "/minhasaulas")
+	@PreAuthorize("hasAnyRole('PROFESSOR')")
+	public ResponseEntity<List<AulaDTO>> minhasaulas() {
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+		Usuario obj = usuarioService.findByEmail(email);
+		EnumSemana diaSemana = EnumSemana.toEnum(buscarDiaSemana());
+		List<Aula> list = aulaService.minhasaulas(obj.getId()).stream()
+			.filter(l -> l.getDiaDaSemana().getDescricao().equals(diaSemana.getDescricao())).collect(Collectors.toList());
+		List<AulaDTO> aulas = list.stream().map(item -> new AulaDTO(item)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(aulas);
+	}
+	
+	// TODAS AS AULAS
+	@GetMapping(value = "/todasminhasaulas")
+	@PreAuthorize("hasAnyRole('PROFESSOR')")
+	public ResponseEntity<List<AulaDTO>> todasminhasaulas() {
+		String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+		Usuario obj = usuarioService.findByEmail(email);
+		List<Aula> list = aulaService.minhasaulas(obj.getId());
+		List<AulaDTO> aulas = list.stream().map(item -> new AulaDTO(item)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(aulas);
+	}
+
 	
 	@GetMapping(value = "/{id}")
 	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR', 'ALUNO', 'VISITANTE')")
@@ -120,6 +152,33 @@ public class AulaResource {
 		aulaService.delete(id); 
 		return ResponseEntity.noContent().build();
 	}
+	
+	
+	private Integer buscarDiaSemana() {
+		LocalDate hoje = LocalDate.now();
+	    DayOfWeek day = hoje.getDayOfWeek();
+	    switch (day.getValue()) {
+            case 1: // SEGUNDA
+            	return EnumSemana.SEGUNDA.getCodigo();
+            case 2: // TERCA
+            	return EnumSemana.TERCA.getCodigo();
+            case 3: // QUARTA
+            	return EnumSemana.QUARTA.getCodigo();
+            case 4: // QUINTA
+            	return EnumSemana.QUINTA.getCodigo();
+            case 5: // SEXTA
+            	return EnumSemana.SEXTA.getCodigo();
+            case 6: // SABADO
+            	return EnumSemana.SABADO.getCodigo();
+            case 7: // DOMINGO
+            	return EnumSemana.DOMINGO.getCodigo();
+            default:
+            	return null;
+        }
+	}
+
+
+	
 
 }
  

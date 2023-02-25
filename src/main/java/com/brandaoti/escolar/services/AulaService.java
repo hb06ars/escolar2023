@@ -19,6 +19,9 @@ public class AulaService {
 	@Autowired
 	private AulaRepository aulaRepository;
 	
+	public List<Aula> minhasaulas(Integer id) {
+		return aulaRepository.minhasaulas(id);
+	}
 	
 	public Aula findById(Integer id) {
 		Optional<Aula> obj = aulaRepository.findById(id);

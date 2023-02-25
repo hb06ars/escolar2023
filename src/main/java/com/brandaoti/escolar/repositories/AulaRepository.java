@@ -12,5 +12,8 @@ public interface AulaRepository extends JpaRepository<Aula, Integer>{
 	@Query("SELECT a FROM Aula a WHERE a.turma.id = :id")
 	List<Aula> buscarTurma(Integer id);
 
+	@Query("SELECT a FROM Aula a WHERE a.professor.id = :id order by a.diaDaSemana asc , a.inicioAula asc ")
+	List<Aula> minhasaulas(Integer id);
+
 	
 }
