@@ -53,7 +53,7 @@ public class UploadResource {
 	private ProfessorService professorService;
 
 	@PostMapping(value = "/uploadalunos" )
-	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR', 'ALUNO')")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	public ResponseEntity<String> uploadAlunos(@RequestParam("file")MultipartFile file) throws Exception {
 		ProcessaExcel processaExcel = new ProcessaExcel();
 		List<Tabela> tabelas = processaExcel.processar(file);
@@ -101,7 +101,7 @@ public class UploadResource {
 	
 	
 	@PostMapping(value = "/uploadaulas")
-	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR', 'ALUNO')")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	public ResponseEntity<String> uploadAulas(@RequestParam("file") MultipartFile file) throws Exception {
 		ProcessaExcel processaExcel = new ProcessaExcel();
 		List<Tabela> tabelas = processaExcel.processar(file);
@@ -144,7 +144,7 @@ public class UploadResource {
 
 	
 	@PostMapping(value = "/uploadturmas")
-	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR', 'ALUNO')")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	public ResponseEntity<String> uploadTurmas(@RequestParam("file") MultipartFile file) throws Exception {
 		ProcessaExcel processaExcel = new ProcessaExcel();
 		List<Tabela> tabelas = processaExcel.processar(file);

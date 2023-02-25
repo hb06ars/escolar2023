@@ -53,7 +53,7 @@ public class AlunoResource {
 	}
 	
 	@GetMapping(value = "/removerTurmaDoAluno/{idAluno}")
-	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR')")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	public ResponseEntity<TurmaIgnoraSenhaDTO> removerTurmaDoAluno(@PathVariable Integer idAluno) {
 		Turma t = turmaService.findByTurmaDoAluno(idAluno);
 		List<Usuario> lista = t.getAlunos();
@@ -71,7 +71,7 @@ public class AlunoResource {
 	
 	
 	@GetMapping(value = "/adicionarAlunoNaTurma/{cpfAluno}/{idTurma}")
-	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PROFESSOR')")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR')")
 	public ResponseEntity<TurmaIgnoraSenhaDTO> adicionarAlunoNaTurma(@PathVariable String cpfAluno, @PathVariable Integer idTurma) {
 		Optional<Turma> turmaAtual = turmaService.findByTurmaDoAlunoPorCpf(cpfAluno);
 		Usuario aluno = alunoService.buscarCpfAluno(cpfAluno);
