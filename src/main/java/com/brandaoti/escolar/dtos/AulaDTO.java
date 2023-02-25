@@ -43,9 +43,17 @@ public class AulaDTO {
 		this.dataAtualizacao = obj.getDataAtualizacao();
 		this.inicioAula = obj.getInicioAula();
 		this.fimAula = obj.getFimAula();
-		this.professor = removerDadosProfessores(obj.getProfessor());
-		if(this.professorSubstituto != null)
+		if(obj.getProfessor() != null) {
+			this.professor = removerDadosProfessores(obj.getProfessor());
+		} else {
+			this.professor = new Usuario();
+		}	
+		if(obj.getProfessorSubstituto() != null) {
 			this.professorSubstituto = removerDadosProfessores(obj.getProfessorSubstituto());
+		} else {
+			this.professorSubstituto = new Usuario();
+		}
+			
 	}
 	
 	
