@@ -92,6 +92,10 @@ public class AulaResource {
 		Usuario professor = professorService.buscarIdProfessor(Integer.parseInt(objDTO.getProfessor().getNome().split(" - ")[0]));
 		objDTO.setDisciplina(disciplina);
 		objDTO.setProfessor(professor);
+		if(objDTO.getProfessorSubstituto() != null && !objDTO.getProfessorSubstituto().getNome().equals("")) {
+			Usuario professorSubstituto = professorService.buscarIdProfessor(Integer.parseInt(objDTO.getProfessorSubstituto().getNome().split(" - ")[0]));
+			objDTO.setProfessorSubstituto(professorSubstituto);	
+		}
 		Aula obj = aulaService.update(id, objDTO);
 		// Atualizando turma
 		Turma turmaAntiga = turmaService.findById(objDTO.getTurma().getId());
