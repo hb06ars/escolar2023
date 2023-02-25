@@ -89,13 +89,19 @@ public class AulaResource {
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<AulaDTO> update(@PathVariable Integer id, @Valid @RequestBody AulaDTO objDTO) {
 		Disciplina disciplina = disciplinaService.findNomeDisciplina(objDTO.getDisciplina().getNomeDisciplina());
-		Usuario professor = professorService.buscarIdProfessor(Integer.parseInt(objDTO.getProfessor().getNome().split(" - ")[0]));
-		objDTO.setDisciplina(disciplina);
-		objDTO.setProfessor(professor);
-		if(objDTO.getProfessorSubstituto() != null && !objDTO.getProfessorSubstituto().getNome().equals("")) {
+		if(objDTO.getProfessor() != null && objDTO.getProfessor().getNome() != null && !objDTO.getProfessor().getNome().equals("")) {
+			Usuario professor = professorService.buscarIdProfessor(Integer.parseInt(objDTO.getProfessor().getNome().split(" - ")[0]));
+			objDTO.setProfessor(professor);
+		} else {
+			objDTO.setProfessor(null);
+		}
+		if(objDTO.getProfessorSubstituto() != null && objDTO.getProfessorSubstituto().getNome() != null && !objDTO.getProfessorSubstituto().getNome().equals("")) {
 			Usuario professorSubstituto = professorService.buscarIdProfessor(Integer.parseInt(objDTO.getProfessorSubstituto().getNome().split(" - ")[0]));
 			objDTO.setProfessorSubstituto(professorSubstituto);	
+		} else {
+			objDTO.setProfessorSubstituto(null);
 		}
+		objDTO.setDisciplina(disciplina);
 		Aula obj = aulaService.update(id, objDTO);
 		// Atualizando turma
 		Turma turmaAntiga = turmaService.findById(objDTO.getTurma().getId());
